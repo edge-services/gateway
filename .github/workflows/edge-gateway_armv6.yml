@@ -1,4 +1,4 @@
-name: edge-gateway_arm
+name: edge-gateway_armv6
 
 on:
   # schedule:
