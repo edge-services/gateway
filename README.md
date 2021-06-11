@@ -72,4 +72,5 @@ sudo hcitool -i hci0 lescan
 
 ## Refrences
 
+- [Edge Computing](https://github.com/sinny777/edge-computing)
 - [Rule Engine](https://github.com/cachecontrol/json-rules-engine)
