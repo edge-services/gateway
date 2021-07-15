@@ -52,6 +52,30 @@
         {
           "name": "SIMULATE",
           "value": false
+        },
+        {
+          "name": "AUTH_SVC_ENDPOINT",
+          "value": "http://keycloak-svc-http-smartthings.sandbox-team-2ab66b053c14936810608de9a1deac9c-0000.eu-gb.containers.appdomain.cloud"
+        },
+        {
+          "name": "IOT_SVC_ENDPOINT",
+          "value": "http://iot-svc-smartthings.sandbox-team-2ab66b053c14936810608de9a1deac9c-0000.eu-gb.containers.appdomain.cloud"
+        },
+        {
+          "name": "TENANT_ID",
+          "value": "ibm"
+        },
+        {
+          "name": "CUSTOMER_ID",
+          "value": "f057feb8-4045-4e56-b521-c46168c43c06"
+        },
+        {
+          "name": "CLIENT_ID",
+          "value": "texas-instruments"
+        },
+        {
+          "name": "CLIENT_SECRET",
+          "value": "39a7d908-bbf0-42ca-ac11-6b3511df891d"
         }
       ]
     }

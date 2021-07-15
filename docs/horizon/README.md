@@ -62,10 +62,6 @@ $ sudo bash ./agent-install.sh -i . -u $HZN_EXCHANGE_USER_AUTH
 
     - Steps to follow on Agent after installation
 
-$ source agent-install.cfg
-    OR
-$ eval export $(cat agent-install.cfg)
-
 export DOCKER_HUB_ID="<dockerhubid>"
 echo "P@ssw0rd" | docker login -u $DOCKER_HUB_ID --password-stdin
 
@@ -103,6 +99,10 @@ docker run --rm sinny777/myhelloworld:1.0.0
     - Publish service
 
 hzn dev service new -s myservice -V 1.0.0 -i $DOCKER_HUB_ID/myservice --noImageGen
+
+$ source agent-install.cfg
+    OR
+$ eval export $(cat agent-install.cfg)
 
 eval $(hzn util configconv -f hzn.json)
 export ARCH=$(hzn architecture)

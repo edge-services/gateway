@@ -30,7 +30,7 @@ export class GatewayService implements GatewayServiceI {
     console.log('FETCH GATEWAY CONFIGURATIONS: >>> ');
     console.log('FETCH CONNECTED DEVICES LIST: >>> ');
     console.log('FETCH RULES FOR SENSORS DATA: >>> ');
-    await this.syncRules({});
+    // await this.syncRules({});
   }
 
   async syncRules(config: any): Promise<void> {    

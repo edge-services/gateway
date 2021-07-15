@@ -39,7 +39,6 @@ export class RuleService implements RuleServiceI {
             }
         }
         
-        console.log('Rules To Add: >> ', formatedRules.length);
         await this.addRules(formatedRules);
 
     }
@@ -48,7 +47,7 @@ export class RuleService implements RuleServiceI {
         if(rules){
             for(let rule of rules){
                 this.engine.addRule(rule);
-                console.log('Rule Added: >> ', JSON.stringify(rule));
+                // console.log('Rule Added: >> ', JSON.stringify(rule));
             } 
         }               
     }
@@ -68,7 +67,7 @@ export class RuleService implements RuleServiceI {
                                     console.log('EVENT: >> ', event);                                  
                                     if(event.type == 'HotNHumid'){
                                         console.log("Rule Triggered for data: ", transformedData, ", Event: ", event, "\n\n"); 
-                                        this.publishIFTTTWebhook(event.type, {'value1': payload.d.temp, 'value2': payload.d.hum});                                                                 
+                                        this.publishIFTTTWebhook(event.type, {'value1': transformedData.d.temp, 'value2': transformedData.d.hum});                                                                 
                                     }                                    
                                 }                            
                             });
@@ -82,11 +81,20 @@ export class RuleService implements RuleServiceI {
     }
 
     private async transformNvalidate(payload: any): Promise<any>{
-
         let func = function transform(self: any, payload: any){
-            payload['d']['ts'] = self.moment.format('YYYY-MM-DD HH:mm:ss Z')
-            console.log('In Transform function: >> ', payload);
-            return payload;
+            let transformedPayload: any = {
+                type: payload.type,
+                uniqueId: payload.uniqueId,
+                d: {
+                    temp: payload.temp,
+                    hum: payload.hum,
+                    press: payload.press,
+                    alt: payload.alt
+                }
+            };
+            transformedPayload['d']['ts'] = self.moment.format('YYYY-MM-DD HH:mm:ss Z')
+            console.log('In Transformed data: >> ', transformedPayload);
+            return transformedPayload;
         };
       
         var transformFuncStr = String(func);

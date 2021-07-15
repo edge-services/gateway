@@ -17,8 +17,8 @@ export class SimulatorUtility implements SimulatorUtilityI {
         try{
                 console.log('Starting SIMULATOR....');
                 await this.createScheduler(simulateJson);
-                // let rules: Array<any> = simulateJson.rules;
-                // this.ruleService.addRules(rules);
+                let rules: Array<any> = simulateJson.rules;
+                this.ruleService.addRules(rules);
             } catch(err){
                 console.log("Error in simulate: >>>>>>> ");
                 console.log(err);
@@ -31,11 +31,10 @@ export class SimulatorUtility implements SimulatorUtilityI {
                 let s = SCHEDULE.scheduleJob(p.frequency, () => {
                     let sensorData: any = {
                         type: device.type,
-                        uniqueId: device.uniqueId,
-                        d: {}
+                        uniqueId: device.uniqueId                        
                     };
                     for(const sensor of p.sensors){
-                        sensorData["d"][sensor.name] = this.getRandomInclusive(sensor.config);                             
+                        sensorData[sensor.name] = this.getRandomInclusive(sensor.config);                             
                     }; 
                     // console.log(sensorData);
                     this.ruleService.processRules(sensorData);                         

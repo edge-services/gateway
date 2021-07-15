@@ -14,7 +14,7 @@ export class IoTService implements IoTServiceI {
   async initService(): Promise<void>{
     console.log(' IN IoTService.initService: >>>>>> ');   
     const tokenResp = await this.fetchAuthToken();
-    console.log('tokenResp set: >> ', tokenResp);
+    // console.log('tokenResp set: >> ', tokenResp);
     await this.commonService.setItemInCache('token', tokenResp);
   }
 
