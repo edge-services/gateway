@@ -54,7 +54,7 @@ export class RuleService implements RuleServiceI {
 
     async processRules(payload: any): Promise<void> {    
         try{
-            console.log('IN RuleService.processRules, payload: >> ', payload);
+            // console.log('IN RuleService.processRules, payload: >> ', payload);
                 const transformedData: any = await this.transformNvalidate(payload);
                 // console.log('transformedData: >> ', transformedData);
                 if(transformedData) {
@@ -82,7 +82,7 @@ export class RuleService implements RuleServiceI {
     }
 
     private async transformNvalidate(payload: any): Promise<any>{
-        console.log('In transformNvalidate, payload: >> ', payload);
+        // console.log('In transformNvalidate, payload: >> ', payload);
         let func = function transform(self: any, payload: any){
             try{
                 payload = JSON.parse(payload);
