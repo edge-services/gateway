@@ -40,12 +40,12 @@ export class EdgeGatewayApplication extends BootMixin(
     });
     this.component(RestExplorerComponent);
 
-    this.bind(UtilityBindings.SIMULATOR_UTILITY).toClass(SimulatorUtility);
+    this.bind(UtilityBindings.SIMULATOR_UTILITY).toClass(SimulatorUtility).inScope(BindingScope.SINGLETON);
     this.bind(ServiceBindings.COMMON_SERVICE).toClass(CommonService).inScope(BindingScope.SINGLETON);
     this.bind(ServiceBindings.RULE_SERVICE).toClass(RuleService).inScope(BindingScope.SINGLETON);
-    this.bind(ServiceBindings.RADIO_SERVICE).toClass(RadioService);
-    this.bind(ServiceBindings.GATEWAY_SERVICE).toClass(GatewayService);
-    this.bind(ServiceBindings.IOT_SERVICE).toClass(IoTService);
+    this.bind(ServiceBindings.RADIO_SERVICE).toClass(RadioService).inScope(BindingScope.SINGLETON);;
+    this.bind(ServiceBindings.GATEWAY_SERVICE).toClass(GatewayService).inScope(BindingScope.SINGLETON);
+    this.bind(ServiceBindings.IOT_SERVICE).toClass(IoTService).inScope(BindingScope.SINGLETON);
 
     this.projectRoot = __dirname;
     // Customize @loopback/boot Booter Conventions here

@@ -4,7 +4,7 @@ import { RadioServiceI, RuleServiceI } from './types';
 
 let RADIO: any;
 
-@bind({scope: BindingScope.TRANSIENT})
+@bind({scope: BindingScope.SINGLETON})
 export class RadioService implements RadioServiceI {
 
     radio: any;

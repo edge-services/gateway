@@ -4,7 +4,7 @@ import { ServiceBindings } from '../keys';
 import { CommonServiceI, IoTServiceI } from './types';
 import fetch from 'cross-fetch';
 
-@bind({scope: BindingScope.TRANSIENT})
+@bind({scope: BindingScope.SINGLETON})
 export class IoTService implements IoTServiceI {
   constructor(
     @inject(ServiceBindings.COMMON_SERVICE) private commonService: CommonServiceI

@@ -5,7 +5,7 @@ import { RadioServiceI, CommonServiceI, GatewayServiceI, IoTServiceI, RuleServic
 import { SystemInfo } from '../models';
 import fetch from 'cross-fetch';
 
-@bind({scope: BindingScope.TRANSIENT})
+@bind({scope: BindingScope.SINGLETON})
 export class GatewayService implements GatewayServiceI {
   constructor(
     @inject(ServiceBindings.COMMON_SERVICE) private commonService: CommonServiceI,

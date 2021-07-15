@@ -6,7 +6,7 @@ import { Engine, Rule } from 'json-rules-engine';
 const moment = require('moment');
 import fetch from 'cross-fetch';
 
-@bind({scope: BindingScope.TRANSIENT})
+@bind({scope: BindingScope.SINGLETON})
 export class RuleService implements RuleServiceI {
 
     engine: Engine;
@@ -54,6 +54,7 @@ export class RuleService implements RuleServiceI {
 
     async processRules(payload: any): Promise<void> {    
         try{
+            console.log('IN RuleService.processRules, payload: >> ', payload);
                 const transformedData: any = await this.transformNvalidate(payload);
                 // console.log('transformedData: >> ', transformedData);
                 if(transformedData) {
