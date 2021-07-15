@@ -36,7 +36,7 @@ export class SimulatorUtility implements SimulatorUtilityI {
                     for(const sensor of p.sensors){
                         sensorData["d"][sensor.name] = this.getRandomInclusive(sensor.config);                             
                     }; 
-                    console.log(sensorData);
+                    // console.log(sensorData);
                     this.ruleService.processRules(sensorData);                         
                 });                              
             }            

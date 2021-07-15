@@ -1,29 +1,24 @@
 {
     "devices": [
         {
-            "type":"HB_SENSOR_V1",
-            "uniqueId":"HB_3C71BF4340FC",
+            "type":"MultiSensorBoard",
+            "uniqueId":"SB_MICRO-3C71BF4340FC",
             "publish": [
                 {
                     "frequency": "*/5 * * * * *",
                     "sensors": [
-                        {"name": "hum", "config" : {"min": 40, "max": 70}},
-                        {"name": "temp", "config": {"min": 15, "max": 40}}                        
-                    ]  
-                },
-                {
-                    "frequency": "*/10 * * * * *",
-                    "sensors": [
+                        {"name": "hum", "config" : {"min": 50, "max": 60}},
+                        {"name": "temp", "config": {"min": 34, "max": 40}},
                         {"name": "press", "config": {"min": 974, "max": 976}},
-                        {"name": "alt", "config": {"min": 304, "max": 306}}
+                        {"name": "alt", "config": {"min": 304, "max": 306}}                       
                     ]  
-                }              
+                }            
             ]            
         }
     ],
     "transformations": [
         {
-            "deviceType": "HB_SENSOR_V1",
+            "deviceType": "MultiSensorBoard",
             "transformFunc": "function transform(data) {\n console.log('In Transform function: >> ', data);\n return data;\n }"
         }
     ],
@@ -36,7 +31,7 @@
                             {
                                 "fact": "type",
                                 "operator": "equal",
-                                "value": "HB_SENSOR_V1"
+                                "value": "MultiSensorBoard"
                             },
                             {
                                 "fact": "d",
@@ -55,7 +50,7 @@
                 ]
             },
             "event": {
-                "type": "switchOnAC",
+                "type": "HotNHumid",
                 "params": {
                     "message": "Its too hot, turn on the AC!"
                 }
@@ -69,7 +64,7 @@
                             {
                                 "fact": "type",
                                 "operator": "equal",
-                                "value": "HB_SENSOR_V1"
+                                "value": "MultiSensorBoard"
                             },
                             {
                                 "fact": "d",

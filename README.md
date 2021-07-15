@@ -50,6 +50,10 @@ sudo docker run --privileged --rm -it -p 9000:9000 --name gateway-app -v /opt:/o
     
 ```
 
+## Output Example: 
+
+Radio data received: {"type":"HB_SENSOR","uniqueId":"SB_MICRO-3C71BF4340FC","temp":32.42,"hum":48.93848,"press":973.3259,"alt":337.8273}
+
 ## BLUETOOTH
 
 ```
