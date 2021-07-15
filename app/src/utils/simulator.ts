@@ -17,8 +17,8 @@ export class SimulatorUtility implements SimulatorUtilityI {
         try{
                 console.log('Starting SIMULATOR....');
                 await this.createScheduler(simulateJson);
-                let rules: Array<any> = simulateJson.rules;
-                this.ruleService.addRules(rules);
+                // let rules: Array<any> = simulateJson.rules;
+                // this.ruleService.addRules(rules);
             } catch(err){
                 console.log("Error in simulate: >>>>>>> ");
                 console.log(err);
