@@ -7,7 +7,7 @@
                 {
                     "frequency": "*/5 * * * * *",
                     "sensors": [
-                        {"name": "hum", "config" : {"min": 50, "max": 60}},
+                        {"name": "hum", "config" : {"min": 54, "max": 60}},
                         {"name": "temp", "config": {"min": 34, "max": 40}},
                         {"name": "press", "config": {"min": 974, "max": 976}},
                         {"name": "alt", "config": {"min": 304, "max": 306}}                       
@@ -25,69 +25,31 @@
     "rules": [
         {
             "conditions": {
-                "any": [
+                "priority": 1,
+                "all": [
                     {
-                        "all": [
-                            {
-                                "fact": "type",
-                                "operator": "equal",
-                                "value": "MultiSensorBoard"
-                            },
-                            {
-                                "fact": "d",
-                                "operator": "greaterThanInclusive",
-                                "value": 35,
-                                "path": "$.temp"
-                            },
-                            {
-                                "fact": "d",
-                                "operator": "greaterThanInclusive",
-                                "value": 55,
-                                "path": "$.hum"
-                            }
-                        ]
-                    }                    
-                ]
-            },
-            "event": {
-                "type": "HotNHumid",
-                "params": {
-                    "message": "Its too hot, turn on the AC!"
-                }
-            }
-        },
-        {
-            "conditions": {
-                "any": [
+                        "operator": "greaterThanInclusive",
+                        "value": 35,
+                        "fact": "d",
+                        "path": "$.temp"
+                    },
                     {
-                        "all": [
-                            {
-                                "fact": "type",
-                                "operator": "equal",
-                                "value": "MultiSensorBoard"
-                            },
-                            {
-                                "fact": "d",
-                                "operator": "greaterThanInclusive",
-                                "value": 975,
-                                "path": "$.press"
-                            },
-                            {
-                                "fact": "d",
-                                "operator": "greaterThanInclusive",
-                                "value": 305,
-                                "path": "$.alt"
-                            }
-                        ]
+                        "operator": "greaterThanInclusive",
+                        "value": 55,
+                        "fact": "d",
+                        "path": "$.hum"
                     }
                 ]
             },
+            "priority": 1,
             "event": {
-                "type": "TooHigh",
+                "type": "HotNHumid",
                 "params": {
-                    "message": "Its too high, come down!"
+                    "message": "Its too hot, turn on the AC!",
+                    "metadata": {}
                 }
-            }
-        }        
+            },
+            "name": "HotNHumid"
+        }     
     ]
 }

@@ -1,7 +1,7 @@
 import { SimulatorUtility } from './utils/simulator';
 import { RuleServiceI } from './services/types';
 import {BootMixin} from '@loopback/boot';
-import {ApplicationConfig} from '@loopback/core';
+import {ApplicationConfig, BindingScope} from '@loopback/core';
 import {
   RestExplorerBindings,
   RestExplorerComponent,
@@ -14,6 +14,7 @@ import * as dotenv from "dotenv";
 import {MySequence} from './sequence';
 import { ServiceBindings, UtilityBindings } from './keys';
 import { CommonService, RuleService, RadioService, GatewayService } from './services';
+import { IoTService } from './services/iot.service';
 
 export {ApplicationConfig};
 
@@ -40,11 +41,11 @@ export class EdgeGatewayApplication extends BootMixin(
     this.component(RestExplorerComponent);
 
     this.bind(UtilityBindings.SIMULATOR_UTILITY).toClass(SimulatorUtility);
-    this.bind(ServiceBindings.COMMON_SERVICE).toClass(CommonService);
-    this.bind(ServiceBindings.RULE_SERVICE).toClass(RuleService);
+    this.bind(ServiceBindings.COMMON_SERVICE).toClass(CommonService).inScope(BindingScope.SINGLETON);
+    this.bind(ServiceBindings.RULE_SERVICE).toClass(RuleService).inScope(BindingScope.SINGLETON);
     this.bind(ServiceBindings.RADIO_SERVICE).toClass(RadioService);
     this.bind(ServiceBindings.GATEWAY_SERVICE).toClass(GatewayService);
-
+    this.bind(ServiceBindings.IOT_SERVICE).toClass(IoTService);
 
     this.projectRoot = __dirname;
     // Customize @loopback/boot Booter Conventions here

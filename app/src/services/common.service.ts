@@ -5,9 +5,14 @@ import * as fs from 'fs';
 import { CommonServiceI } from '.';
 import { SystemInfo } from './../models/system-info.model';
 import * as simulateJson from '../config/simulate.json';
+import { Cache, CacheContainer } from 'node-ts-cache'
+import { MemoryStorage } from 'node-ts-cache-storage-memory'
 
-@bind({scope: BindingScope.TRANSIENT})
+@bind({scope: BindingScope.SINGLETON})
 export class CommonService implements CommonServiceI {
+
+  appCache = new CacheContainer(new MemoryStorage())
+
   constructor(
     
   ) {}
@@ -61,6 +66,14 @@ export class CommonService implements CommonServiceI {
 
   async loadConfiguration(): Promise<any>{
     return false;
+  }
+
+  async setItemInCache(key: string, value: any){
+    this.appCache.setItem(key, value, {isCachedForever: true});
+  }
+
+  async getItemFromCache(key: string){
+    return this.appCache.getItem(key);
   }
 
 }

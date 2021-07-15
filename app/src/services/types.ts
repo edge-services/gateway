@@ -4,6 +4,8 @@ export interface CommonServiceI {
     getSystemDetails(): Promise<any> ;
     getSystemInformation(valueObject: any): Promise<SystemInfo> ;
     getSerialNumber(): Promise<string> ;
+    setItemInCache(key: string, content: any): Promise<void>;
+    getItemFromCache(key: string): Promise<any>;
 }
 
 export interface RadioServiceI {
@@ -19,6 +21,12 @@ export interface GatewayServiceI {
 }
 
 export interface RuleServiceI {
+    formatNAddRules(rules: Array<any>): Promise<void>;
     addRules(rules: Array<any>): Promise<void>;
     processRules(data: any): Promise<void>;
+}
+
+export interface IoTServiceI {
+    initService(): void;   
+    fetchRules(payload: any): Promise<any> ;   
 }

@@ -17,12 +17,38 @@ export class RuleService implements RuleServiceI {
     ) {
         this.engine = new Engine();
         this.moment = moment();
-     }
+    }
+
+    async formatNAddRules(rules: Array<any>): Promise<void>{
+        let formatedRules: Array<Rule> = [];
+        for(let rule of rules){
+            if(rule.condition.type == 'all' || rule.condition.type == 'any'){
+                let formatedRule: any = {name: rule.name ,'conditions': {}, 'event': rule.event};
+                formatedRule['conditions'][rule.condition.type] = [];
+                for(let child of rule.condition.children){
+                    if(child.type == 'fact'){
+                        formatedRule['conditions'][rule.condition.type].push({
+                            "fact": child.fact.key,
+                            "operator": child.fact.operator,
+                            "value": child.fact.value,
+                            "path": child.fact.path
+                        })                       
+                    }
+                }
+                formatedRules.push(new Rule(formatedRule));
+            }
+        }
+        
+        console.log('Rules To Add: >> ', formatedRules.length);
+        await this.addRules(formatedRules);
+
+    }
 
     async addRules(rules: Array<Rule>) {
         if(rules){
             for(let rule of rules){
                 this.engine.addRule(rule);
+                console.log('Rule Added: >> ', JSON.stringify(rule));
             } 
         }               
     }
@@ -38,7 +64,8 @@ export class RuleService implements RuleServiceI {
                         .then(results => {
                             results.events.map(event => {
                                 if(event && event.params){
-                                    delete transformedData['success-events'];                                    
+                                    delete transformedData['success-events'];  
+                                    console.log('EVENT: >> ', event);                                  
                                     if(event.type == 'HotNHumid'){
                                         console.log("Rule Triggered for data: ", transformedData, ", Event: ", event, "\n\n"); 
                                         this.publishIFTTTWebhook(event.type, {'value1': payload.d.temp, 'value2': payload.d.hum});                                                                 
