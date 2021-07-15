@@ -82,6 +82,7 @@ export class RuleService implements RuleServiceI {
     }
 
     private async transformNvalidate(payload: any): Promise<any>{
+        console.log('In transformNvalidate, payload: >> ', payload);
         let func = function transform(self: any, payload: any){
             try{
                 payload = JSON.parse(payload);
@@ -99,7 +100,7 @@ export class RuleService implements RuleServiceI {
                 }
             };
             transformedPayload['d']['ts'] = self.moment.format('YYYY-MM-DD HH:mm:ss Z')
-            console.log('In Transformed data: >> ', transformedPayload);
+            console.log('In transformNvalidate, Transformed data: >> ', transformedPayload);
             return transformedPayload;
         };
       
