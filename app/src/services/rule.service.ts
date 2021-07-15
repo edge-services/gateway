@@ -82,14 +82,19 @@ export class RuleService implements RuleServiceI {
 
     private async transformNvalidate(payload: any): Promise<any>{
         let func = function transform(self: any, payload: any){
+            try{
+                payload = JSON.parse(payload);
+            }catch(error){
+                console.log('INVLAID JSON DATA: >> ', payload);
+            }
             let transformedPayload: any = {
-                type: payload.type,
-                uniqueId: payload.uniqueId,
+                type: payload['type'],
+                uniqueId: payload['uniqueId'],
                 d: {
-                    temp: payload.temp,
-                    hum: payload.hum,
-                    press: payload.press,
-                    alt: payload.alt
+                    temp: payload['temp'],
+                    hum: payload['hum'],
+                    press: payload['press'],
+                    alt: payload['alt']
                 }
             };
             transformedPayload['d']['ts'] = self.moment.format('YYYY-MM-DD HH:mm:ss Z')
