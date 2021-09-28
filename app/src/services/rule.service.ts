@@ -89,17 +89,24 @@ export class RuleService implements RuleServiceI {
             }catch(error){
                 console.log('INVLAID JSON DATA: >> ', payload);
             }
-            let transformedPayload: any = {
-                type: payload['type'],
-                uniqueId: payload['uniqueId'],
-                d: {
-                    temp: payload['temp'],
-                    hum: payload['hum'],
-                    press: payload['press'],
-                    alt: payload['alt']
-                }
-            };
-            transformedPayload['d']['ts'] = self.moment.format('YYYY-MM-DD HH:mm:ss Z')
+            let transformedPayload: any;
+            if(payload['type'] && payload['uniqueId'] && !payload['d']){
+                transformedPayload = {
+                    type: payload['type'],
+                    uniqueId: payload['uniqueId'],
+                    d: {
+                        temp: payload['temp'],
+                        hum: payload['hum'],
+                        press: payload['press'],
+                        alt: payload['alt']
+                    }
+                };
+                transformedPayload['d']['ts'] = self.moment.format('YYYY-MM-DD HH:mm:ss Z')
+            }else{
+                transformedPayload = payload;
+                transformedPayload['ts'] = self.moment.format('YYYY-MM-DD HH:mm:ss Z')
+            }
+            
             console.log('In transformNvalidate, Transformed data: >> ', transformedPayload);
             return transformedPayload;
         };
