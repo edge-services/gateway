@@ -104,7 +104,7 @@ export class RuleService implements RuleServiceI {
                 transformedPayload['d']['ts'] = self.moment.format('YYYY-MM-DD HH:mm:ss Z')
             }else{
                 transformedPayload = payload;
-                transformedPayload['ts'] = self.moment.format('YYYY-MM-DD HH:mm:ss Z')
+                transformedPayload['ts'] = self.moment.format('YYYY-MM-DD HH:mm:ss Z');
             }
             
             console.log('In transformNvalidate, Transformed data: >> ', transformedPayload);
