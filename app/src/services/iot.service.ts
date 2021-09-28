@@ -46,7 +46,7 @@ export class IoTService implements IoTServiceI {
   async fetchRules(payload: any){
         console.log('IN fetchRules: >> Payload: ', payload);
         const tokenResp = await this.commonService.getItemFromCache('token');
-        if(!tokenResp && !tokenResp.access_token){
+        if(!tokenResp || !tokenResp.access_token){
             return [];
         }
 

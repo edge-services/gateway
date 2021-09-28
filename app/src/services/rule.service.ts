@@ -2,21 +2,21 @@ import { ServiceBindings } from '../keys';
 import { RuleServiceI, CommonServiceI } from './types';
 import {bind, inject, BindingScope} from '@loopback/core';
 import { Engine, Rule } from 'json-rules-engine';
-// import moment from 'moment';
-const moment = require('moment');
+import moment from 'moment';
+// const moment = require('moment');
 import fetch from 'cross-fetch';
 
 @bind({scope: BindingScope.SINGLETON})
 export class RuleService implements RuleServiceI {
 
     engine: Engine;
-    moment = moment();
+    moment = moment;
 
     constructor(
         @inject(ServiceBindings.COMMON_SERVICE) private commonService: CommonServiceI
     ) {
         this.engine = new Engine();
-        this.moment = moment();
+        this.moment = moment;
     }
 
     async formatNAddRules(rules: Array<any>): Promise<void>{
@@ -101,10 +101,10 @@ export class RuleService implements RuleServiceI {
                         alt: payload['alt']
                     }
                 };
-                transformedPayload['d']['ts'] = self.moment.format('YYYY-MM-DD HH:mm:ss Z')
+                transformedPayload['d']['ts'] = self.moment().format('YYYY-MM-DD HH:mm:ss Z')
             }else{
                 transformedPayload = payload;
-                transformedPayload['ts'] = self.moment.format('YYYY-MM-DD HH:mm:ss Z');
+                transformedPayload['ts'] = self.moment().format('YYYY-MM-DD HH:mm:ss Z');                
             }
             
             console.log('In transformNvalidate, Transformed data: >> ', transformedPayload);

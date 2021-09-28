@@ -18,7 +18,7 @@ export class GatewayService implements GatewayServiceI {
   async initGateway(): Promise<void>{
     console.log(' IN GatewayService.onStart: >>>>>> ');
     const systemInfo = await this.getSystemInformation({});
-    await this.iotService.initService();
+    // await this.iotService.initService();
     if(systemInfo && systemInfo.other && systemInfo.other.internetAvailable){
       await this.syncWithCloud();
     }
