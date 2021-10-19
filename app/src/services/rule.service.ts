@@ -47,7 +47,7 @@ export class RuleService implements RuleServiceI {
         if(rules){
             for(let rule of rules){
                 this.engine.addRule(rule);
-                // console.log('Rule Added: >> ', JSON.stringify(rule));
+                console.log('Rule Added: >> ', JSON.stringify(rule));
             } 
         }               
     }
@@ -56,7 +56,7 @@ export class RuleService implements RuleServiceI {
         try{
             // console.log('IN RuleService.processRules, payload: >> ', payload);
                 const transformedData: any = await this.transformNvalidate(payload);
-                // console.log('transformedData: >> ', transformedData);
+                console.log('transformedData: >> ', transformedData);
                 if(transformedData) {
                     if(transformedData && transformedData.d){
                         this.engine
@@ -69,7 +69,7 @@ export class RuleService implements RuleServiceI {
                                     if(event.type == 'HotNHumid'){
                                         console.log("Rule Triggered for data: ", transformedData, ", Event: ", event, "\n\n"); 
                                         // this.publishIFTTTWebhook(event.type, {'value1': transformedData.d.temp, 'value2': transformedData.d.hum});
-                                        this.publishToFlow(event.type, transformedData);                                                                 
+                                        this.publishToFlow(event, transformedData);                                                                 
                                     }                                    
                                 }                            
                             });
@@ -88,7 +88,7 @@ export class RuleService implements RuleServiceI {
             try{
                 payload = JSON.parse(payload);
             }catch(error){
-                console.log('INVLAID JSON DATA: >> ', payload);
+                // console.log('INVLAID JSON DATA: >> ', payload);
             }
             let transformedPayload: any;
             if(payload['type'] && payload['uniqueId'] && !payload['d']){
@@ -108,7 +108,7 @@ export class RuleService implements RuleServiceI {
                 transformedPayload['ts'] = self.moment().format('YYYY-MM-DD HH:mm:ss Z');                
             }
             
-            console.log('In transformNvalidate, Transformed data: >> ', transformedPayload);
+            // console.log('In transformNvalidate, Transformed data: >> ', transformedPayload);
             return transformedPayload;
         };
       
@@ -118,7 +118,7 @@ export class RuleService implements RuleServiceI {
         return transFunc(this, payload);
     }
 
-    private async publishToFlow(event: Event, data: any){
+    private async publishToFlow(event: any, data: any){
         console.log('IN publishToFlow: >> Event: ', event, ', Data: ', data);
         if(process.env.FLOW_URL){
 

@@ -58,40 +58,10 @@
             "defaultValue": "false"
         },
         {
-            "name": "AUTH_SVC_ENDPOINT",
-            "label": "AUTH_SVC_ENDPOINT",
+            "name": "FLOW_URL",
+            "label": "FLOW_URL",
             "type": "string",
-            "defaultValue": "http://smartthings-auth.mybluemix.net"
-        },
-        {
-            "name": "IOT_SVC_ENDPOINT",
-            "label": "IOT_SVC_ENDPOINT",
-            "type": "string",
-            "defaultValue": "http://smartthings-iot.mybluemix.net"
-        },
-        {
-            "name": "TENANT_ID",
-            "label": "TENANT_ID",
-            "type": "string",
-            "defaultValue": "ibm"
-        },
-        {
-            "name": "CUSTOMER_ID",
-            "label": "CUSTOMER_ID",
-            "type": "string",
-            "defaultValue": "f057feb8-4045-4e56-b521-c46168c43c06"
-        },
-        {
-            "name": "CLIENT_ID",
-            "label": "CLIENT_ID",
-            "type": "string",
-            "defaultValue": "texas-instruments"
-        },
-        {
-            "name": "CLIENT_SECRET",
-            "label": "CLIENT_SECRET",
-            "type": "string",
-            "defaultValue": "39a7d908-bbf0-42ca-ac11-6b3511df891d"
+            "defaultValue": "http://localhost:1880/event"
         }
     ],
     "deployment": {

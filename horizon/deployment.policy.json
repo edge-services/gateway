@@ -54,28 +54,8 @@
           "value": false
         },
         {
-          "name": "AUTH_SVC_ENDPOINT",
-          "value": "http://smartthings-auth.mybluemix.net"
-        },
-        {
-          "name": "IOT_SVC_ENDPOINT",
-          "value": "http://smartthings-iot.mybluemix.net"
-        },
-        {
-          "name": "TENANT_ID",
-          "value": "ibm"
-        },
-        {
-          "name": "CUSTOMER_ID",
-          "value": "f057feb8-4045-4e56-b521-c46168c43c06"
-        },
-        {
-          "name": "CLIENT_ID",
-          "value": "texas-instruments"
-        },
-        {
-          "name": "CLIENT_SECRET",
-          "value": "39a7d908-bbf0-42ca-ac11-6b3511df891d"
+          "name": "FLOW_URL",
+          "value": "http://localhost:1880/event"
         }
       ]
     }
