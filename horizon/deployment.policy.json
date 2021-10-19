@@ -55,11 +55,11 @@
         },
         {
           "name": "AUTH_SVC_ENDPOINT",
-          "value": "http://keycloak-svc-http-smartthings.sandbox-team-2ab66b053c14936810608de9a1deac9c-0000.eu-gb.containers.appdomain.cloud"
+          "value": "http://smartthings-auth.mybluemix.net"
         },
         {
           "name": "IOT_SVC_ENDPOINT",
-          "value": "http://iot-svc-smartthings.sandbox-team-2ab66b053c14936810608de9a1deac9c-0000.eu-gb.containers.appdomain.cloud"
+          "value": "http://smartthings-iot.mybluemix.net"
         },
         {
           "name": "TENANT_ID",

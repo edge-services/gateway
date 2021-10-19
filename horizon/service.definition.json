@@ -14,7 +14,7 @@
         "versionRange": "[0.0.0,INFINITY)",
         "arch": "$ARCH"
     }],
-    "userInputs": [
+    "userInput": [
         {
             "name": "DB_CONNECTOR",
             "label": "DB Connector",
@@ -61,13 +61,13 @@
             "name": "AUTH_SVC_ENDPOINT",
             "label": "AUTH_SVC_ENDPOINT",
             "type": "string",
-            "defaultValue": "http://keycloak-svc-http-smartthings.sandbox-team-2ab66b053c14936810608de9a1deac9c-0000.eu-gb.containers.appdomain.cloud"
+            "defaultValue": "http://smartthings-auth.mybluemix.net"
         },
         {
             "name": "IOT_SVC_ENDPOINT",
             "label": "IOT_SVC_ENDPOINT",
             "type": "string",
-            "defaultValue": "http://iot-svc-smartthings.sandbox-team-2ab66b053c14936810608de9a1deac9c-0000.eu-gb.containers.appdomain.cloud"
+            "defaultValue": "http://smartthings-iot.mybluemix.net"
         },
         {
             "name": "TENANT_ID",

@@ -68,7 +68,8 @@ export class RuleService implements RuleServiceI {
                                     console.log('EVENT: >> ', event);                                  
                                     if(event.type == 'HotNHumid'){
                                         console.log("Rule Triggered for data: ", transformedData, ", Event: ", event, "\n\n"); 
-                                        this.publishIFTTTWebhook(event.type, {'value1': transformedData.d.temp, 'value2': transformedData.d.hum});                                                                 
+                                        // this.publishIFTTTWebhook(event.type, {'value1': transformedData.d.temp, 'value2': transformedData.d.hum});
+                                        this.publishToFlow(event.type, transformedData);                                                                 
                                     }                                    
                                 }                            
                             });
@@ -101,7 +102,7 @@ export class RuleService implements RuleServiceI {
                         alt: payload['alt']
                     }
                 };
-                transformedPayload['d']['ts'] = self.moment().format('YYYY-MM-DD HH:mm:ss Z')
+                transformedPayload['d']['ts'] = self.moment().format('YYYY-MM-DD HH:mm:ss Z');
             }else{
                 transformedPayload = payload;
                 transformedPayload['ts'] = self.moment().format('YYYY-MM-DD HH:mm:ss Z');                
@@ -115,6 +116,38 @@ export class RuleService implements RuleServiceI {
         let transFunc: Function = new Function ('return ' +transformFuncStr)();
 
         return transFunc(this, payload);
+    }
+
+    private async publishToFlow(event: Event, data: any){
+        console.log('IN publishToFlow: >> Event: ', event, ', Data: ', data);
+        if(process.env.FLOW_URL){
+
+            let payload = {
+                "topic": "detection",
+                "event": event.type,
+                "data": data,
+                "metadata": {
+                    "deviceId": await this.commonService.getSerialNumber(),
+                    "deviceCategory":"EdgeGateway",
+                    "tenantId": "ibm",
+                    "accountId": "3beGT2qPs8SzMNWTaeMN61"
+                }
+            }
+
+            const response = await fetch(process.env.FLOW_URL, {
+                method: 'POST',
+                body: JSON.stringify(payload),
+                headers: {'Content-Type': 'application/json'} });
+              
+              if (!response.ok) { 
+                  console.log('NO RESPONSE FROM FLOW SERVICE POST');
+              }
+            
+              if (response.body !== null) {
+                // console.log(response.body);
+              }
+        }       
+        
     }
 
     private async publishIFTTTWebhook(event: string, payload: any){
