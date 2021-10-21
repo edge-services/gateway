@@ -27,6 +27,7 @@ export class IoTService implements IoTServiceI {
   async syncWithCloud(): Promise<void> {
     await this.fetchAuthToken();
     const thisDevice: Device = await this.fetchCurrentDeviceData();
+    console.log('thisDevice: >>>> ', thisDevice);
     if(thisDevice && thisDevice.accountId){
       const deviceCategoryIds = await this.syncDevices(thisDevice.accountId);
       console.log('deviceCategoryIds: >> ', deviceCategoryIds);
@@ -192,6 +193,7 @@ export class IoTService implements IoTServiceI {
     const devices: any[] = await this.fetchDevices(filter, false);
     if(devices && devices.length > 0){
       const thisDevice = devices[0];
+      gatewayDevice = thisDevice;
       const deviceExists = await this.deviceRepository.exists(thisDevice.id);
       if (deviceExists){
          await this.deviceRepository.replaceById(thisDevice.id, thisDevice);
