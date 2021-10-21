@@ -29,6 +29,7 @@ export class IoTService implements IoTServiceI {
     const thisDevice: Device = await this.fetchCurrentDeviceData();
     if(thisDevice && thisDevice.accountId){
       const deviceCategoryIds = await this.syncDevices(thisDevice.accountId);
+      console.log('deviceCategoryIds: >> ', deviceCategoryIds);
       await this.syncAttributes(thisDevice.accountId, deviceCategoryIds);
       await this.syncRules(thisDevice.accountId, deviceCategoryIds);
       await this.syncETLFunctions(thisDevice.accountId, deviceCategoryIds);      
@@ -113,7 +114,8 @@ export class IoTService implements IoTServiceI {
           }else{
             await this.attributeRepository.create(attribute);
           }
-        });        
+        });
+        console.log('Attributes Loaded count: >> ', attributes.length);       
       }
 
   }
@@ -141,7 +143,8 @@ export class IoTService implements IoTServiceI {
           }else{
             await this.ruleRepository.create(rule);
           }
-        });        
+        });    
+        console.log('Rules Loaded count: >> ', rules.length);    
       }
 
   }
@@ -168,7 +171,8 @@ export class IoTService implements IoTServiceI {
           }else{
             await this.etlFunctionRepository.create(etlFunction);
           }
-        });        
+        }); 
+        console.log('ETLFunctions Loaded count: >> ', etlFunctions.length);       
       }
 
   }
