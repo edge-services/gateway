@@ -15,15 +15,20 @@ export class MongodbDataSource extends juggler.DataSource
     @inject('datasources.config.mongodb', {optional: true})
     dsConfig: object = config,
   ) {
+
+    let dbPassword = process.env.DB_PASSWORD;
+    if(process.env.DB_PASSWORD){
+      dbPassword = encodeURIComponent(process.env.DB_PASSWORD);      
+    }
     
     dsConfig = {
-      name: 'system-info',
+      name: 'mongodb',
       connector: process.env.DB_CONNECTOR,
       // url: process.env.DB_URL,
       host: process.env.DB_HOST,
       port: process.env.DB_PORT,
       user: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
+      password: dbPassword,
       database: process.env.DB_NAME,
       useNewUrlParser: true,
       useUnifiedTopology: true,

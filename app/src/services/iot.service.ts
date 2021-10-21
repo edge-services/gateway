@@ -3,12 +3,17 @@ import {bind, inject, BindingScope} from '@loopback/core';
 import { ServiceBindings } from '../keys';
 import { AuthServiceI, CommonServiceI, IoTServiceI } from './types';
 import fetch from 'cross-fetch';
+import { DeviceRepository } from '../repositories';
+import { repository } from '@loopback/repository';
+import { Device } from '../models';
 
 @bind({scope: BindingScope.SINGLETON})
 export class IoTService implements IoTServiceI {
   constructor(
     @inject(ServiceBindings.COMMON_SERVICE) private commonService: CommonServiceI,
     @inject(ServiceBindings.AUTH_SERVICE) private authService: AuthServiceI,
+    @repository(DeviceRepository)
+      public deviceRepository : DeviceRepository,  
   ) {}
 
   headers: any;
@@ -64,9 +69,20 @@ export class IoTService implements IoTServiceI {
     
     const devices: any[] = await this.fetchDevices(filter, false);
     if(devices && devices.length > 0){
+      // devices.forEach(async device => {
+      //   await this.deviceRepository.updateById(device.id, device);
+      // });
       const thisDevice = devices[0];
-      this.commonService.setItemInCache('thisDevice', thisDevice);
-      console.log('thisDevice: >> ', thisDevice);
+      let gatewayDevice: Device = await this.deviceRepository.findById(thisDevice.id);
+      if (gatewayDevice){
+         gatewayDevice = thisDevice;
+         await this.deviceRepository.updateById(thisDevice.id, thisDevice);
+      }else{
+         gatewayDevice = await this.deviceRepository.create(thisDevice);
+      }
+      
+      this.commonService.setItemInCache('thisDevice', gatewayDevice);
+      console.log('gatewayDevice: >> ', gatewayDevice);
       //TODO: Save Devices data in local DB
     }
 
