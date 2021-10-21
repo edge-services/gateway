@@ -56,7 +56,27 @@
         {
           "name": "FLOW_URL",
           "value": "http://localhost:1880/event"
-        }
+        },
+        {
+          "name": "AUTH_API_URL",
+          "value": "https://smartthings-auth.mybluemix.net"
+      },
+      {
+          "name": "IOT_API_URL",
+          "value": "https://smartthings-iot.mybluemix.net"
+      },
+      {
+          "name": "TENANT_ID",
+          "value": "ibm"
+      },
+      {
+          "name": "CLIENT_ID",
+          "value": "EdgeApplication"
+      },
+      {
+          "name": "CLIENT_SECRET",
+          "value": "b187fe84-5e0e-44e6-af1f-a65a5fe31f5f"
+      }
       ]
     }
   ]
