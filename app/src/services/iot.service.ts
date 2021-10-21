@@ -188,15 +188,14 @@ export class IoTService implements IoTServiceI {
     const devices: any[] = await this.fetchDevices(filter, false);
     if(devices && devices.length > 0){
       const thisDevice = devices[0];
-      gatewayDevice = await this.deviceRepository.findById(thisDevice.id);
-      if (gatewayDevice){
-         gatewayDevice = thisDevice;
-         await this.deviceRepository.updateById(thisDevice.id, thisDevice);
+      const deviceExists = await this.deviceRepository.exists(thisDevice.id);
+      if (deviceExists){
+         await this.deviceRepository.replaceById(thisDevice.id, thisDevice);
       }else{
-         gatewayDevice = await this.deviceRepository.create(thisDevice);
+         await this.deviceRepository.create(thisDevice);
       }
       
-      this.commonService.setItemInCache('thisDevice', gatewayDevice);
+      this.commonService.setItemInCache('thisDevice', thisDevice);
       // console.log('gatewayDevice: >> ', gatewayDevice);      
     }
     return gatewayDevice;

@@ -59,11 +59,11 @@
         },
         {
           "name": "AUTH_API_URL",
-          "value": "https://smartthings-auth.mybluemix.net"
+          "value": "https://smartthings-auth.mybluemix.net/api"
       },
       {
           "name": "IOT_API_URL",
-          "value": "https://smartthings-iot.mybluemix.net"
+          "value": "https://smartthings-iot.mybluemix.net/api"
       },
       {
           "name": "TENANT_ID",
