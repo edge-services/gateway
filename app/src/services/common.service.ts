@@ -57,7 +57,7 @@ export class CommonService implements CommonServiceI {
 		}catch(err){
 			console.log("process.platform: >>> ", process.platform);
 			if(process.platform == 'darwin'){
-				return "000000008c0be72b";
+				return "10000000f3da8141";
 			}else{
 				return '';
 			}

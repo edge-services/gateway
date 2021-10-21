@@ -1,5 +1,5 @@
 import {BindingKey} from '@loopback/context';
-import { CommonServiceI, RuleServiceI, RadioServiceI, GatewayServiceI, IoTServiceI } from './services/types';
+import { CommonServiceI, RuleServiceI, RadioServiceI, GatewayServiceI, IoTServiceI, AuthServiceI } from './services/types';
 import { SimulatorUtilityI } from './utils';
 
 export namespace ServiceBindings {
@@ -22,6 +22,10 @@ export namespace ServiceBindings {
 
   export const IOT_SERVICE = BindingKey.create<IoTServiceI | undefined>(
     'iot.service',
+  );
+
+  export const AUTH_SERVICE = BindingKey.create<AuthServiceI | undefined>(
+    'auth.service',
   );
 
 }

@@ -13,8 +13,9 @@ import path from 'path';
 import * as dotenv from "dotenv";
 import {MySequence} from './sequence';
 import { ServiceBindings, UtilityBindings } from './keys';
-import { CommonService, RuleService, RadioService, GatewayService } from './services';
+import { CommonService, RuleService, RadioService, GatewayService, AuthServiceProvider } from './services';
 import { IoTService } from './services/iot.service';
+import { AuthDataSource } from './datasources';
 
 export {ApplicationConfig};
 
@@ -40,12 +41,16 @@ export class EdgeGatewayApplication extends BootMixin(
     });
     this.component(RestExplorerComponent);
 
+    // this.bind('datasources.config.auth').toClass(AuthDataSource).inScope(BindingScope.SINGLETON);
+
     this.bind(UtilityBindings.SIMULATOR_UTILITY).toClass(SimulatorUtility).inScope(BindingScope.SINGLETON);
     this.bind(ServiceBindings.COMMON_SERVICE).toClass(CommonService).inScope(BindingScope.SINGLETON);
     this.bind(ServiceBindings.RULE_SERVICE).toClass(RuleService).inScope(BindingScope.SINGLETON);
     this.bind(ServiceBindings.RADIO_SERVICE).toClass(RadioService).inScope(BindingScope.SINGLETON);;
     this.bind(ServiceBindings.GATEWAY_SERVICE).toClass(GatewayService).inScope(BindingScope.SINGLETON);
     this.bind(ServiceBindings.IOT_SERVICE).toClass(IoTService).inScope(BindingScope.SINGLETON);
+    this.bind(ServiceBindings.AUTH_SERVICE).toProvider(AuthServiceProvider).inScope(BindingScope.SINGLETON);
+
 
     this.projectRoot = __dirname;
     // Customize @loopback/boot Booter Conventions here
@@ -55,7 +60,7 @@ export class EdgeGatewayApplication extends BootMixin(
         dirs: ['controllers'],
         extensions: ['.controller.js'],
         nested: true,
-      },
+      }
     };
   }
 }

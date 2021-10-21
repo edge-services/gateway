@@ -19,7 +19,7 @@ export class GatewayLifeObserver implements LifeCycleObserver {
     // inject `app` if you need access to other artifacts by `await this.app.get()`
     @inject(CoreBindings.APPLICATION_INSTANCE) private app: Application,
     @inject(ServiceBindings.GATEWAY_SERVICE) private gatewayService: GatewayServiceI,
-    @inject(UtilityBindings.SIMULATOR_UTILITY) private simulatoreUtility: SimulatorUtilityI,
+    @inject(UtilityBindings.SIMULATOR_UTILITY) private simulatoreUtility: SimulatorUtilityI
   ) {}
 
   async boot(): Promise<void> {
@@ -36,7 +36,8 @@ export class GatewayLifeObserver implements LifeCycleObserver {
     await this.gatewayService.initGateway();
     if(process.env.SIMULATE && process.env.SIMULATE.toLowerCase() === 'true'){
       await this.simulatoreUtility.simulate({});
-    }    
+    } 
+   
   }
 
   /**

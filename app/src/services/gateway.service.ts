@@ -1,7 +1,7 @@
 // import { SystemInfo } from './../models/system-info.model';
 import {bind, inject, BindingScope} from '@loopback/core';
 import { ServiceBindings } from '../keys';
-import { RadioServiceI, CommonServiceI, GatewayServiceI, IoTServiceI, RuleServiceI } from './types';
+import { RadioServiceI, CommonServiceI, GatewayServiceI, IoTServiceI, RuleServiceI, AuthServiceI } from './types';
 import { SystemInfo } from '../models';
 import fetch from 'cross-fetch';
 
@@ -13,29 +13,26 @@ export class GatewayService implements GatewayServiceI {
     @inject(ServiceBindings.IOT_SERVICE) private iotService: IoTServiceI,
     @inject(ServiceBindings.RULE_SERVICE) private ruleService: RuleServiceI,
   ) {}
-
   
   async initGateway(): Promise<void>{
     console.log(' IN GatewayService.onStart: >>>>>> ');
-    const systemInfo = await this.getSystemInformation({});
-    // await this.iotService.initService();
-    if(systemInfo && systemInfo.other && systemInfo.other.internetAvailable){
-      await this.syncWithCloud();
-    }
     await this.radioService.initRadio();    
-  }
-  
-  async syncWithCloud(): Promise<void> {
-    // throw new Error("Method not implemented.");
-    console.log('FETCH GATEWAY CONFIGURATIONS: >>> ');
-    console.log('FETCH CONNECTED DEVICES LIST: >>> ');
-    console.log('FETCH RULES FOR SENSORS DATA: >>> ');
-    await this.syncRules({});
+    await this.iotService.initService();  
+    const systemInfo = await this.getSystemInformation({}); 
+    console.log('systemInfo: >> ', systemInfo);   
+    if(systemInfo && systemInfo.other && systemInfo.other.internetAvailable){      
+      await this.syncWithCloud();    
+    }
+    
   }
 
+  async syncWithCloud(): Promise<void> {
+    await this.iotService.syncWithCloud();
+  }
+ 
   async syncRules(config: any): Promise<void> {    
     try{
-            const rules = await this.iotService.fetchRules({});
+            const rules = await this.iotService.fetchRules({}, false);
             console.log('RULES: >> ', rules);
             this.ruleService.formatNAddRules(rules);
         } catch(err){

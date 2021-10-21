@@ -8,6 +8,11 @@ export interface CommonServiceI {
     getItemFromCache(key: string): Promise<any>;
 }
 
+export interface AuthServiceI {
+    getClientToken(clientId: string, secret: string): any;
+    refreshAuthToken(tentantId: string, principalId: string, refreshToken: string): any;
+}
+
 export interface RadioServiceI {
     initRadio(): void;
     isAvailable(): boolean;
@@ -27,6 +32,8 @@ export interface RuleServiceI {
 }
 
 export interface IoTServiceI {
-    initService(): void;   
-    fetchRules(payload: any): Promise<any> ;   
+    initService(): void;  
+    syncWithCloud(): Promise<void>; 
+    fetchETLFunctions(payload: any, local: boolean): Promise<any> ; 
+    fetchRules(payload: any, local: boolean): Promise<any> ;   
 }

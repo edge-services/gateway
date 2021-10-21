@@ -4,3 +4,4 @@ export * from './radio.service';
 export * from './rule.service';
 export * from './gateway.service';
 
+export * from './auth.service';
