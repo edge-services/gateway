@@ -43,7 +43,7 @@ export class RuleService implements RuleServiceI {
 
     }
 
-    async addRules(rules: Array<Rule>) {
+    private async addRules(rules: Array<Rule>) {
         if(rules){
             for(let rule of rules){
                 this.engine.addRule(rule);
@@ -52,24 +52,22 @@ export class RuleService implements RuleServiceI {
         }               
     }
 
-    async processRules(payload: any): Promise<void> {    
+    async execute(payload: any): Promise<void> {    
         try{
-            // console.log('IN RuleService.processRules, payload: >> ', payload);
-                const transformedData: any = await this.transformNvalidate(payload);
-                console.log('transformedData: >> ', transformedData);
-                if(transformedData) {
-                    if(transformedData && transformedData.d){
+            console.log('IN RuleService.execute, payload: >> ', payload);
+                if(payload) {
+                    if(payload && payload.d){
                         this.engine
-                        .run(transformedData)
+                        .run(payload)
                         .then(results => {
                             results.events.map(event => {
                                 if(event && event.params){
-                                    delete transformedData['success-events'];  
+                                    delete payload['success-events'];  
                                     console.log('EVENT: >> ', event);                                  
-                                    if(event.type == 'HotNHumid'){
-                                        console.log("Rule Triggered for data: ", transformedData, ", Event: ", event, "\n\n"); 
+                                    if(event.params && event.params.action && event.params.action == 'publish'){
+                                        console.log("Rule Triggered for data: ", payload, ", Event: ", event, "\n\n"); 
                                         // this.publishIFTTTWebhook(event.type, {'value1': transformedData.d.temp, 'value2': transformedData.d.hum});
-                                        this.publishToFlow(event, transformedData);                                                                 
+                                        this.publishToFlow(event, payload);                                                                 
                                     }                                    
                                 }                            
                             });
@@ -80,42 +78,6 @@ export class RuleService implements RuleServiceI {
                 console.log("Error in processRules: >>>>>>> ");
                 console.error(err);
             }
-    }
-
-    private async transformNvalidate(payload: any): Promise<any>{
-        // console.log('In transformNvalidate, payload: >> ', payload);
-        let func = function transform(self: any, payload: any){
-            try{
-                payload = JSON.parse(payload);
-            }catch(error){
-                // console.log('INVLAID JSON DATA: >> ', payload);
-            }
-            let transformedPayload: any;
-            if(payload['type'] && payload['uniqueId'] && !payload['d']){
-                transformedPayload = {
-                    type: payload['type'],
-                    uniqueId: payload['uniqueId'],
-                    d: {
-                        temp: payload['temp'],
-                        hum: payload['hum'],
-                        press: payload['press'],
-                        alt: payload['alt']
-                    }
-                };
-                transformedPayload['d']['ts'] = self.moment().format('YYYY-MM-DD HH:mm:ss Z');
-            }else{
-                transformedPayload = payload;
-                transformedPayload['ts'] = self.moment().format('YYYY-MM-DD HH:mm:ss Z');                
-            }
-            
-            // console.log('In transformNvalidate, Transformed data: >> ', transformedPayload);
-            return transformedPayload;
-        };
-      
-        var transformFuncStr = String(func);
-        let transFunc: Function = new Function ('return ' +transformFuncStr)();
-
-        return transFunc(this, payload);
     }
 
     private async publishToFlow(event: any, data: any){

@@ -1,4 +1,5 @@
 import {bind, inject, BindingScope} from '@loopback/core';
+import { DataFlowServiceI } from '.';
 import { ServiceBindings } from '../keys';
 import { RadioServiceI, RuleServiceI } from './types';
 
@@ -12,7 +13,7 @@ export class RadioService implements RadioServiceI {
     private radioAvailable: boolean = false;
 
     constructor(
-      @inject(ServiceBindings.RULE_SERVICE) private ruleService: RuleServiceI
+      @inject(ServiceBindings.DATA_FLOW_SERVICE) private dataFlowService: DataFlowServiceI
     ) {
         if(process.platform != 'darwin'){
             RADIO = require('edge-sx127x');
@@ -37,7 +38,7 @@ export class RadioService implements RadioServiceI {
               this.radio.on('data', (data: any, rssi: any) => {
 				        // console.log('data:', '\'' + data.toString() + '\'', rssi);
                 console.log('\n\nData received over Radio: ' + data.toString());  
-                this.ruleService.processRules(data.toString());                
+                this.dataFlowService.execute(data.toString());                
               });
 
               // enable receive mode

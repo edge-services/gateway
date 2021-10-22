@@ -51,7 +51,7 @@ export class ETLFunction extends UserModifiableEntity {
     type: 'object',
     required: true
   })
-  content?: object;
+  content?: any;
 
   @property({
     type: 'string',
@@ -63,7 +63,7 @@ export class ETLFunction extends UserModifiableEntity {
     type: 'object',
     required: false
   })
-  metadata?: object;
+  metadata?: any;
 
   @property({
     type: 'string',

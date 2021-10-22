@@ -1,11 +1,19 @@
 import {BindingKey} from '@loopback/context';
-import { CommonServiceI, RuleServiceI, RadioServiceI, GatewayServiceI, IoTServiceI, AuthServiceI } from './services/types';
+import { CommonServiceI, RuleServiceI, RadioServiceI, GatewayServiceI, IoTServiceI, AuthServiceI, ETLFunctionServiceI, DataFlowServiceI } from './services/types';
 import { SimulatorUtilityI } from './utils';
 
 export namespace ServiceBindings {
 
   export const COMMON_SERVICE = BindingKey.create<CommonServiceI | undefined>(
     'common.service',
+  );
+
+  export const ETLFUNCTION_SERVICE = BindingKey.create<ETLFunctionServiceI | undefined>(
+    'etlfunction.service',
+  );
+
+  export const DATA_FLOW_SERVICE = BindingKey.create<DataFlowServiceI | undefined>(
+    'dataflow.service',
   );
 
   export const RULE_SERVICE = BindingKey.create<RuleServiceI | undefined>(

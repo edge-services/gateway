@@ -27,13 +27,22 @@ export interface GatewayServiceI {
 
 export interface RuleServiceI {
     formatNAddRules(rules: Array<any>): Promise<void>;
-    addRules(rules: Array<any>): Promise<void>;
-    processRules(data: any): Promise<void>;
+    // addRules(rules: Array<any>): Promise<void>;
+    execute(data: any): Promise<any>;
+}
+
+export interface ETLFunctionServiceI {
+    execute(payload: any): Promise<any>;
+}
+
+export interface DataFlowServiceI {
+    execute(payload: any): Promise<any>;
 }
 
 export interface IoTServiceI {
     initService(): void;  
     syncWithCloud(): Promise<void>; 
+    fetchDevices(filter: any, local: boolean): Promise<any>;
     fetchETLFunctions(payload: any, local: boolean): Promise<any> ; 
     fetchRules(payload: any, local: boolean): Promise<any> ;   
 }

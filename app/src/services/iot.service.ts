@@ -1,7 +1,7 @@
 // import { SystemInfo } from './../models/system-info.model';
 import {bind, inject, BindingScope} from '@loopback/core';
 import { ServiceBindings } from '../keys';
-import { AuthServiceI, CommonServiceI, IoTServiceI } from './types';
+import { AuthServiceI, CommonServiceI, IoTServiceI, RuleServiceI } from './types';
 import fetch from 'cross-fetch';
 import { AttributeRepository, DeviceRepository, ETLFunctionRepository, RuleRepository } from '../repositories';
 import { repository } from '@loopback/repository';
@@ -12,6 +12,7 @@ export class IoTService implements IoTServiceI {
   constructor(
     @inject(ServiceBindings.COMMON_SERVICE) private commonService: CommonServiceI,
     @inject(ServiceBindings.AUTH_SERVICE) private authService: AuthServiceI,
+    @inject(ServiceBindings.RULE_SERVICE) private ruleService: RuleServiceI,
     @repository(DeviceRepository) public deviceRepository : DeviceRepository, 
     @repository(AttributeRepository) public attributeRepository : AttributeRepository, 
     @repository(RuleRepository) public ruleRepository : RuleRepository, 
@@ -27,10 +28,11 @@ export class IoTService implements IoTServiceI {
   async syncWithCloud(): Promise<void> {
     await this.fetchAuthToken();
     const thisDevice: Device = await this.fetchCurrentDeviceData();
-    console.log('thisDevice: >>>> ', thisDevice);
+    // console.log('thisDevice: >>>> ', thisDevice);
     if(thisDevice && thisDevice.accountId){
       const deviceCategoryIds = await this.syncDevices(thisDevice.accountId);
-      console.log('deviceCategoryIds: >> ', deviceCategoryIds);
+      // console.log('deviceCategoryIds: >> ', deviceCategoryIds);
+
       await this.syncAttributes(thisDevice.accountId, deviceCategoryIds);
       await this.syncRules(thisDevice.accountId, deviceCategoryIds);
       await this.syncETLFunctions(thisDevice.accountId, deviceCategoryIds);      
@@ -76,10 +78,10 @@ export class IoTService implements IoTServiceI {
       };
     
       const devices: any[] = await this.fetchDevices(filter, false);
-      let deviceCategoryIds: string[] = [];
+      let deviceCategoryIds: Set<string> = new Set();
       if(devices && devices.length > 0){
         devices.forEach(async device => {
-          deviceCategoryIds.push(device.deviceCategoryId);
+          deviceCategoryIds.add(device.deviceCategoryId);          
           let deviceExists: boolean = await this.deviceRepository.exists(device.id);
           if (deviceExists){
             await this.deviceRepository.replaceById(device.id, device);
@@ -89,7 +91,7 @@ export class IoTService implements IoTServiceI {
         });        
       }
 
-      return deviceCategoryIds;
+      return Array.from(deviceCategoryIds.values());
 
   }
 
@@ -105,7 +107,7 @@ export class IoTService implements IoTServiceI {
       "limit": 500,
       "skip": 0
       };
-    
+      console.log('syncAttributes, filter: >> ', filter);
       const attributes: any[] = await this.fetchAttributes(EntityType.DEVICE, filter, false);
       if(attributes && attributes.length > 0){
         attributes.forEach(async attribute => {
@@ -145,6 +147,7 @@ export class IoTService implements IoTServiceI {
             await this.ruleRepository.create(rule);
           }
         });    
+        await this.ruleService.formatNAddRules(rules);
         console.log('Rules Loaded count: >> ', rules.length);    
       }
 
@@ -171,8 +174,9 @@ export class IoTService implements IoTServiceI {
             await this.etlFunctionRepository.replaceById(etlFunction.id, etlFunction);
           }else{
             await this.etlFunctionRepository.create(etlFunction);
-          }
-        }); 
+          }  
+        });
+         
         console.log('ETLFunctions Loaded count: >> ', etlFunctions.length);       
       }
 
@@ -207,35 +211,9 @@ export class IoTService implements IoTServiceI {
     return gatewayDevice;
   }
 
-  // async fetchAuthToken(){
-  //   console.log('IN fetchAuthToken: ');
-  //   // Object.keys(filter).forEach(key => IOT_SVC_URL.searchParams.append(key, filter[key]))
-  //   if(!process.env.CLIENT_ID || !process.env.CLIENT_SECRET){
-  //       return false;
-  //   }
-
-  //   const payload = new URLSearchParams();
-  //   payload.append('client_id', process.env.CLIENT_ID);
-  //   payload.append('client_secret', process.env.CLIENT_SECRET);
-  //   payload.append('grant_type', 'client_credentials');
-  //   const AUTH_SVC_URL = `${process.env.AUTH_SVC_ENDPOINT}/auth/realms/${process.env.TENANT_ID}/protocol/openid-connect/token`;
-  //   const response = await fetch(AUTH_SVC_URL, {
-  //       method: 'POST',
-  //       body: payload.toString(),
-  //       headers: {
-  //         'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
-  //         'Accept': 'application/json'
-  //       }        
-  //     });
-      
-  //     return response.json();
-
-  //   }
-
   async fetchDevices(filter: any, local: boolean): Promise<any> {
-    // console.log('IN fetchDevices: >> Filter: ', filter);
     if(local){
-      //TODO: Fetch data from local DB
+      return this.deviceRepository.find(filter);
     }else{
       // Object.keys(filter).forEach(key => IOT_SVC_URL.searchParams.append(key, filter[key]))
       const params = JSON.stringify(filter);
@@ -252,7 +230,7 @@ export class IoTService implements IoTServiceI {
   async fetchAttributes(entityType: EntityType, filter: any, local: boolean): Promise<any> {
     // console.log('IN fetchAttributes: >> Filter: ', JSON.stringify(filter.where));
     if(local){
-      //TODO: Fetch data from local DB
+      return this.attributeRepository.find(filter);
     }else{
       // Object.keys(filter).forEach(key => IOT_SVC_URL.searchParams.append(key, filter[key]))
       const params = JSON.stringify(filter);
@@ -268,7 +246,7 @@ export class IoTService implements IoTServiceI {
   async fetchETLFunctions(filter: any, local: boolean): Promise<any> {
     // console.log('IN fetchETLFunctions: >> Filter: ', filter);
     if(local){
-      //TODO: Fetch data from local DB
+      return this.etlFunctionRepository.find(filter);
     }else{
       // Object.keys(filter).forEach(key => IOT_SVC_URL.searchParams.append(key, filter[key]))
       const params = JSON.stringify(filter);
@@ -284,7 +262,7 @@ export class IoTService implements IoTServiceI {
   async fetchRules(filter: any, local: boolean): Promise<any> {
     console.log('IN fetchRules: >> Filter: ', JSON.stringify(filter.where));
     if(local){
-      //TODO: Fetch data from local DB
+      return this.ruleRepository.find(filter);
     }else{
       // Object.keys(filter).forEach(key => IOT_SVC_URL.searchParams.append(key, filter[key]))
       const params = JSON.stringify(filter);

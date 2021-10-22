@@ -25,7 +25,7 @@ export class CommonService implements CommonServiceI {
       };
     }
     const systemDetails = await si.system();
-    console.log("systemDetails: >> ", systemDetails);
+    // console.log("systemDetails: >> ", systemDetails);
     let systemInfo: SystemInfo = await si.get(valueObject);
     systemInfo.internet = await si.inetChecksite('google.com');
     systemInfo.other = {};

@@ -10,8 +10,7 @@ export class GatewayService implements GatewayServiceI {
   constructor(
     @inject(ServiceBindings.COMMON_SERVICE) private commonService: CommonServiceI,
     @inject(ServiceBindings.RADIO_SERVICE) private radioService: RadioServiceI,
-    @inject(ServiceBindings.IOT_SERVICE) private iotService: IoTServiceI,
-    @inject(ServiceBindings.RULE_SERVICE) private ruleService: RuleServiceI,
+    @inject(ServiceBindings.IOT_SERVICE) private iotService: IoTServiceI
   ) {}
   
   async initGateway(): Promise<void>{
@@ -28,17 +27,6 @@ export class GatewayService implements GatewayServiceI {
 
   async syncWithCloud(): Promise<void> {
     await this.iotService.syncWithCloud();
-  }
- 
-  async syncRules(config: any): Promise<void> {    
-    try{
-            const rules = await this.iotService.fetchRules({}, false);
-            console.log('RULES: >> ', rules);
-            this.ruleService.formatNAddRules(rules);
-        } catch(err){
-            console.log("Error in syncRules: >>>>>>> ");
-            console.log(err);
-        }
   }
 
   async getSystemInformation(valueObject: any): Promise<SystemInfo>{   
