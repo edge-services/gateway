@@ -9,7 +9,7 @@ export class RuleRepository extends DefaultCrudRepository<
   RuleRelations
 > {
   constructor(
-    @inject('datasources.mongodb') dataSource: MongodbDataSource,
+    @inject('datasources.memory') dataSource: MongodbDataSource,
   ) {
     super(Rule, dataSource);
   }

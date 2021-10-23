@@ -9,7 +9,7 @@ export class AttributeRepository extends DefaultCrudRepository<
   AttributeRelations
 > {
   constructor(
-    @inject('datasources.mongodb') dataSource: MongodbDataSource,
+    @inject('datasources.memory') dataSource: MongodbDataSource,
   ) {
     super(Attribute, dataSource);
   }

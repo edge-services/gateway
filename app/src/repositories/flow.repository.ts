@@ -9,7 +9,7 @@ export class FlowRepository extends DefaultCrudRepository<
   FlowRelations
 > {
   constructor(
-    @inject('datasources.mongodb') dataSource: MongodbDataSource,
+    @inject('datasources.memory') dataSource: MongodbDataSource,
   ) {
     super(Flow, dataSource);
   }

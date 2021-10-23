@@ -4,7 +4,6 @@ import * as os from 'os';
 import * as fs from 'fs';
 import { CommonServiceI } from '.';
 import { SystemInfo } from './../models/system-info.model';
-import * as simulateJson from '../config/simulate.json';
 import { Cache, CacheContainer } from 'node-ts-cache'
 import { MemoryStorage } from 'node-ts-cache-storage-memory'
 

@@ -54,7 +54,7 @@ export class RuleService implements RuleServiceI {
 
     async execute(payload: any): Promise<void> {    
         try{
-            console.log('IN RuleService.execute, payload: >> ', payload);
+            // console.log('IN RuleService.execute, payload: >> ', payload);
                 if(payload) {
                     if(payload && payload.d){
                         this.engine

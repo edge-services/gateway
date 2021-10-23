@@ -9,7 +9,7 @@ export class EntityDataRepository extends DefaultCrudRepository<
   EntityDataRelations
 > {
   constructor(
-    @inject('datasources.mongodb') dataSource: MongodbDataSource,
+    @inject('datasources.memory') dataSource: MongodbDataSource,
   ) {
     super(EntityData, dataSource);
   }

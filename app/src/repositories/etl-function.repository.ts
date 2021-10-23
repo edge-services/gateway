@@ -9,7 +9,7 @@ export class ETLFunctionRepository extends DefaultCrudRepository<
   ETLFunctionRelations
 > {
   constructor(
-    @inject('datasources.mongodb') dataSource: MongodbDataSource,
+    @inject('datasources.memory') dataSource: MongodbDataSource,
   ) {
     super(ETLFunction, dataSource);
   }

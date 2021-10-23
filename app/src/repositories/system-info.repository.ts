@@ -9,7 +9,7 @@ export class SystemInfoRepository extends DefaultCrudRepository<
   SystemInfoRelations
 > {
   constructor(
-    @inject('datasources.mongodb') dataSource: MongodbDataSource,
+    @inject('datasources.memory') dataSource: MongodbDataSource,
   ) {
     super(SystemInfo, dataSource);
   }

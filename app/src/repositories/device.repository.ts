@@ -9,7 +9,7 @@ export class DeviceRepository extends DefaultCrudRepository<
   DeviceRelations
 > {
   constructor(
-    @inject('datasources.mongodb') dataSource: MongodbDataSource,
+    @inject('datasources.memory') dataSource: MongodbDataSource,
   ) {
     super(Device, dataSource);
   }

@@ -9,7 +9,7 @@ export class AssetRepository extends DefaultUserModifyCrudRepository<
   AssetRelations
 > {
   constructor(
-    @inject('datasources.mongodb') dataSource: MongodbDataSource,
+    @inject('datasources.memory') dataSource: MongodbDataSource,
   ) {
     super(Asset, dataSource);
   }

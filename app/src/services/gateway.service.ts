@@ -15,18 +15,22 @@ export class GatewayService implements GatewayServiceI {
   
   async initGateway(): Promise<void>{
     console.log(' IN GatewayService.onStart: >>>>>> ');
+    const systemInfo = await this.getSystemInformation({});
+    let isOnline = false; 
+    if(systemInfo && systemInfo.other && systemInfo.other.internetAvailable){    
+      isOnline = systemInfo.other.internetAvailable;      
+    } 
     await this.radioService.initRadio();    
     await this.iotService.initService();  
-    const systemInfo = await this.getSystemInformation({}); 
-    console.log('systemInfo: >> ', systemInfo);   
-    if(systemInfo && systemInfo.other && systemInfo.other.internetAvailable){      
-      await this.syncWithCloud();    
-    }
     
+    console.log('systemInfo: >> ', systemInfo); 
+    await this.commonService.setItemInCache('isOnline', isOnline); 
+    // await this.commonService.setItemInCache('isOnline', false);  
+    await this.syncWithCloud();  
   }
 
   async syncWithCloud(): Promise<void> {
-    await this.iotService.syncWithCloud();
+    await this.iotService.syncWithCloud(); 
   }
 
   async getSystemInformation(valueObject: any): Promise<SystemInfo>{   

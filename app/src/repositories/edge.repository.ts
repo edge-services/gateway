@@ -9,7 +9,7 @@ export class EdgeRepository extends DefaultCrudRepository<
   EdgeRelations
 > {
   constructor(
-    @inject('datasources.mongodb') dataSource: MongodbDataSource,
+    @inject('datasources.memory') dataSource: MongodbDataSource,
   ) {
     super(Edge, dataSource);
   }
