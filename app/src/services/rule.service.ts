@@ -54,7 +54,7 @@ export class RuleService implements RuleServiceI {
 
     async execute(payload: any): Promise<void> {    
         try{
-            // console.log('IN RuleService.execute, payload: >> ', payload);
+            console.log('IN RuleService.execute, payload: >> ', payload);
                 if(payload) {
                     if(payload && payload.d){
                         this.engine
@@ -96,37 +96,40 @@ export class RuleService implements RuleServiceI {
                 }
             }
 
-            const response = await fetch(process.env.FLOW_URL, {
-                method: 'POST',
-                body: JSON.stringify(payload),
-                headers: {'Content-Type': 'application/json'} });
-              
-              if (!response.ok) { 
-                  console.log('NO RESPONSE FROM FLOW SERVICE POST');
-              }
-            
-              if (response.body !== null) {
-                // console.log(response.body);
-              }
-        }       
-        
+            try{
+                const response = await fetch(process.env.FLOW_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(payload),
+                    headers: {'Content-Type': 'application/json'} });
+                  
+                  if (!response.ok) { 
+                      console.log('NO RESPONSE FROM FLOW SERVICE POST');
+                  }
+                
+                  if (response.body !== null) {
+                    // console.log(response.body);
+                  }
+            }catch(error){
+                console.error(error);
+            }            
+        }               
     }
 
-    private async publishIFTTTWebhook(event: string, payload: any){
-        console.log('IN publishIFTTTWebhook: >> Event: ', event, ', Payload: ', payload);
-        const iftt_URL = `https://maker.ifttt.com/trigger/${event}/with/key/btF72fQ8puB6rda4-ANVvn`;
-        const response = await fetch(iftt_URL, {
-            method: 'POST',
-            body: JSON.stringify(payload),
-            headers: {'Content-Type': 'application/json'} });
+    // private async publishIFTTTWebhook(event: string, payload: any){
+    //     console.log('IN publishIFTTTWebhook: >> Event: ', event, ', Payload: ', payload);
+    //     const iftt_URL = `https://maker.ifttt.com/trigger/${event}/with/key/btF72fQ8puB6rda4-ANVvn`;
+    //     const response = await fetch(iftt_URL, {
+    //         method: 'POST',
+    //         body: JSON.stringify(payload),
+    //         headers: {'Content-Type': 'application/json'} });
           
-          if (!response.ok) { 
-              console.log('NO RESPONSE FROM IFTTT WebHook POST');
-          }
+    //       if (!response.ok) { 
+    //           console.log('NO RESPONSE FROM IFTTT WebHook POST');
+    //       }
         
-          if (response.body !== null) {
-            // console.log(response.body);
-          }
-    }
+    //       if (response.body !== null) {
+    //         // console.log(response.body);
+    //       }
+    // }
 
 }

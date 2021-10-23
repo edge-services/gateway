@@ -24,7 +24,7 @@ export class DataFlowService implements DataFlowServiceI {
 
 
     async execute(payload: any): Promise<any>{
-        console.log('In DataFlowService.execute, payload: >> ', payload);        
+        // console.log('In DataFlowService.execute, payload: >> ', payload);        
         if(payload['type'] && payload['uniqueId']){
            payload = await this.etlFunctionService.execute(payload);
            await this.ruleService.execute(payload);
