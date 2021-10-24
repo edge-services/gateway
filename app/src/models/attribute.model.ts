@@ -1,6 +1,7 @@
 import {model, property} from '@loopback/repository';
 import { UserModifiableEntity } from './user-modifiable-entity.model';
 import { EntityType, AttributeType } from './types';
+import { DataType } from '.';
 
 @model({
   name: 'attributes',
@@ -65,11 +66,18 @@ export class Attribute extends UserModifiableEntity {
     
     @property() label: string; // Fan Switch, Kitchen Light 
 
-    @property() dataType: string; // number, float, string, boolean, object
+    @property({
+      type: 'string',
+      required: true,
+      jsonSchema: {
+        enum: Object.values(DataType),
+      },
+    })
+    dataType: DataType;
 
     @property() dataUnit: string; // unit of data value, for eg. grams, kg, meters, degree celcius or fahrenheit etc
 
-    @property() defaultValue: string;
+    @property() defaultValue: any;
 
     @property({
       type: 'Boolean',

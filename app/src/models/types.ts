@@ -22,6 +22,17 @@
     TELEMETRY = 'TELEMETRY'
   }
 
+  export enum DataType {
+    STRING = 'string',
+    FLOAT = 'float',
+    DOUBLE = 'double',
+    LONG = 'long',
+    NUMBER = 'number',
+    BOOLEAN = 'boolean',
+    OBJECT = 'object',
+    JSON = 'json',
+  }
+
   export enum EntityRelationType {
     CONTAINS = 'CONTAINS',
     MANAGES = 'MANAGES'    

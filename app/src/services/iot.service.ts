@@ -111,7 +111,7 @@ export class IoTService implements IoTServiceI {
       "skip": 0
       };
       // console.log('syncAttributes, filter: >> ', filter);
-      const attributes: any[] = await this.fetchAttributes(EntityType.DEVICE, filter, isOnline);
+      const attributes: Attribute[] = await this.fetchAttributes(EntityType.DEVICE, filter, isOnline);
       if(isOnline && attributes && attributes.length > 0){
         attributes.forEach(async attribute => {
           let attributeExists: boolean = await this.attributeRepository.exists(attribute.id);
@@ -234,7 +234,7 @@ export class IoTService implements IoTServiceI {
        
   }
 
-  async fetchAttributes(entityType: EntityType, filter: any, isOnline: boolean): Promise<any> {
+  async fetchAttributes(entityType: EntityType, filter: any, isOnline: boolean): Promise<Attribute[]> {
     // console.log('IN fetchAttributes: >> Filter: ', JSON.stringify(filter.where));
     if(!isOnline){
       return this.attributeRepository.find(filter);
@@ -280,6 +280,12 @@ export class IoTService implements IoTServiceI {
       });      
       return response.json();
     }       
+  }
+
+  async getMetaData(payload: any): Promise<any> {
+    // const isOnline: boolean = await this.commonService.getItemFromCache('isOnline');
+    //TODO: Return Entity Metadata. For eg. entityCategoryId, entity Attributes
+    return false;       
   }
 
 

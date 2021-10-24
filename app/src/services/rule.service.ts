@@ -54,49 +54,40 @@ export class RuleService implements RuleServiceI {
 
     async execute(payload: any): Promise<void> {    
         try{
-            console.log('IN RuleService.execute, payload: >> ', payload);
-                if(payload) {
-                    if(payload && payload.d){
-                        this.engine
-                        .run(payload)
-                        .then(results => {
-                            results.events.map(event => {
-                                if(event && event.params){
-                                    delete payload['success-events'];  
-                                    console.log('EVENT: >> ', event);                                  
-                                    if(event.params && event.params.action && event.params.action == 'publish'){
-                                        console.log("Rule Triggered for data: ", payload, ", Event: ", event, "\n\n"); 
-                                        // this.publishIFTTTWebhook(event.type, {'value1': transformedData.d.temp, 'value2': transformedData.d.hum});
-                                        this.publishToFlow(event, payload);                                                                 
-                                    }                                    
-                                }                            
-                            });
-                        }).catch(err => console.log(err.stack));
-                    }                    
+            // console.log('IN RuleService.execute, payload: >> ', payload);                
+                if(payload){
+                    this.engine
+                    .run(payload)
+                    .then(results => {
+                        results.events.map(event => {
+                            if(event && event.params){
+                                delete payload['success-events'];  
+                                payload.event = event;                                 
+                                if(event.params && event.params.action && event.params.action == 'publish'){
+                                    this.publishToFlow(payload);                                                                 
+                                }                                    
+                            }                            
+                        });
+                    }).catch(err => {
+                        // console.log(err.stack);
+                        return Promise.reject(err);
+                    });
                 }
+                delete payload['success-events']; 
+                return Promise.resolve(payload); 
             } catch(err){
-                console.log("Error in processRules: >>>>>>> ");
-                console.error(err);
+                // console.log("Error in Rule.execute: >>>>>>> ");
+                // console.error(err);
+                return Promise.reject(err);
             }
+        delete payload['success-events']; 
     }
 
-    private async publishToFlow(event: any, data: any){
-        console.log('IN publishToFlow: >> Event: ', event, ', Data: ', data);
+    private async publishToFlow(payload: any){
         if(process.env.FLOW_URL){
-
-            let payload = {
-                "topic": "detection",
-                "event": event.type,
-                "data": data,
-                "metadata": {
-                    "deviceId": await this.commonService.getSerialNumber(),
-                    "deviceCategory":"EdgeGateway",
-                    "tenantId": "ibm",
-                    "accountId": "3beGT2qPs8SzMNWTaeMN61"
-                }
-            }
-
+            console.log('IN publishToFlow: >> Event: ', payload.event);
             try{
+                payload.topic = 'detection';
                 const response = await fetch(process.env.FLOW_URL, {
                     method: 'POST',
                     body: JSON.stringify(payload),

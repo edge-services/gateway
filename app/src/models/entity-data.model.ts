@@ -1,6 +1,6 @@
 import { model, property } from '@loopback/repository';
 import { UserModifiableEntity } from './user-modifiable-entity.model';
-import { AttributeType, EntityType } from '.';
+import { AttributeType, DataType, EntityType } from '.';
 
 @model({settings: {strict: false}})
 export class EntityData extends UserModifiableEntity {
@@ -17,6 +17,12 @@ export class EntityData extends UserModifiableEntity {
     required: true,
   })
   entityId: string;
+
+  @property({
+    type: 'string',
+    required: false,
+  })
+  entityCategoryId: string;
 
   @property({
     type: 'string',
@@ -40,7 +46,7 @@ export class EntityData extends UserModifiableEntity {
       enum: Object.values(AttributeType),
     },
   })
-  type: AttributeType; // This can be Client Side (CS) | Server Side (SS) | Shared (SH) | Telemetry
+  attributeType: AttributeType; // This can be Client Side (CS) | Server Side (SS) | Shared (SH) | Telemetry
 
   @property({
     type: 'string',
@@ -49,35 +55,26 @@ export class EntityData extends UserModifiableEntity {
   unit: string; // meters, centi-meter, celcius, fahrenheit etc.
 
   @property({
-    type: 'Boolean',
-    required: false,
-  })
-  booleanValue: Boolean;
-
-  @property({
-    type: 'number',
-    required: false,
-  })
-  doubleValue: number;
-
-  @property({
     type: 'string',
-    required: true,
+    required: false,
+    jsonSchema: {
+      enum: Object.values(DataType),
+    },
   })
-  stringValue: string;
+  dataType: DataType;
 
   @property({
-    type: 'object',
+    type: 'any',
     required: true,
   })
-  objectValue: object;
+  attributeValue: any;
 
   @property({
     type: 'date',
     default: () => new Date(),
-    name: 'lastUpdatedTS',
+    name: 'ts',
   })
-  lastUpdatedTS?: Date;
+  ts?: Date;
 
   // Define well-known properties here
 

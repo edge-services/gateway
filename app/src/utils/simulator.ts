@@ -35,7 +35,10 @@ export class SimulatorUtility implements SimulatorUtilityI {
                         sensorData[sensor.name] = this.getRandomInclusive(sensor.config);                             
                     }; 
                     // console.log(sensorData);
-                    this.dataflowService.execute(sensorData);                         
+                    this.dataflowService.execute(sensorData).catch(error => {
+                        console.log('ERROR in Simulator: >> ');
+                        console.error(error);
+                    })                       
                 });                              
             }            
         }        

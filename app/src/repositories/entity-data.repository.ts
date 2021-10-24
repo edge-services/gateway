@@ -1,16 +1,68 @@
-import {DefaultCrudRepository} from '@loopback/repository';
-import {EntityData, EntityDataRelations} from '../models';
-import {MongodbDataSource} from '../datasources';
+import {DataType, EntityData} from '../models';
+import {EntityDataDataSource} from '../datasources';
 import {inject} from '@loopback/core';
+import {InfluxDB,  Point } from '@influxdata/influxdb-client';
 
-export class EntityDataRepository extends DefaultCrudRepository<
-  EntityData,
-  typeof EntityData.prototype.id,
-  EntityDataRelations
-> {
+export class EntityDataRepository {
+
+  client: InfluxDB;
+
   constructor(
-    @inject('datasources.memory') dataSource: MongodbDataSource,
+    @inject('datasources.entity-data') private dataSource: EntityDataDataSource,
   ) {
-    super(EntityData, dataSource);
+    this.client = dataSource.client
   }
+
+  async insert(entityDataList: EntityData[]): Promise<any>{
+    if(!entityDataList || entityDataList.length == 0){
+        return Promise.reject('Nothing to save for EntityData !');
+    }
+    console.log('IN EntityDataRepository.insert, entityData count >> ', entityDataList.length);
+    const writeApi = this.client.getWriteApi(this.dataSource.defaultConfig.org, this.dataSource.defaultConfig.bucket);
+
+    const point = new Point('entityData');
+    point.fields = {};
+    entityDataList.forEach(entityData => {
+      point.tag('entityId', entityData.entityId)
+      .tag('entityType', entityData.entityType)
+      .tag('entityCategoryId', entityData.entityCategoryId);
+      point.fields[entityData.attributeKey] = entityData.attributeValue;
+      // console.log(entityData.dataType, ', key: ',entityData.attributeKey, ' : ', entityData.attributeValue);
+      // if(entityData.dataType){
+      //   if(entityData.dataType == DataType.BOOLEAN){
+      //     point.booleanField(entityData.attributeKey, entityData.attributeValue);
+      //   }
+      //   if(entityData.dataType == DataType.DOUBLE || entityData.dataType == DataType.FLOAT){
+      //     point.floatField(entityData.attributeKey, entityData.attributeValue);
+      //   }
+      //   if(entityData.dataType == DataType.LONG || entityData.dataType == DataType.NUMBER){
+      //     point.intField(entityData.attributeKey, entityData.attributeValue);
+      //   }
+      //   if(entityData.dataType == DataType.STRING){
+      //     point.stringField(entityData.attributeKey, entityData.attributeValue);
+      //   }
+      // }else{
+      //   point.fields = {[entityData.attributeKey]: entityData.attributeValue}
+      // }
+
+      point.timestamp(entityData.ts || new Date().getTime());
+      // console.log('POINT: >> ', point);
+      writeApi.writePoint(point);
+      
+    });
+   
+    writeApi
+        .close()
+        .then(() => {
+            console.log('WRITE FINISHED');
+            Promise.resolve();
+        })
+        .catch(e => {
+            console.error(e)
+            console.log('\\nFinished ERROR');
+            Promise.reject(e);
+        });
+
+  }
+
 }

@@ -32,34 +32,33 @@ export class ETLFunctionService implements ETLFunctionServiceI {
         try{
             if(payload['type'] && payload['uniqueId']){
                const cacheKey = `${payload['uniqueId']}_ETLFunction`;
-               let etlFunctions: any[] = await this.commonService.getItemFromCache(cacheKey);
+               let etlFunctions: ETLFunction[] = await this.commonService.getItemFromCache(cacheKey);
             //    console.log('etlFunctions from Cache: >> ', etlFunctions);
-               if(!etlFunctions || etlFunctions.length == 0){
+               if(!etlFunctions){
                     const filter = {
                             "where": {
                                 "deviceSerialNo": payload['uniqueId']
                             }
                         };
                       
-                    const devices: any[] = await this.iotService.fetchDevices(filter, true);
+                    const devices: any[] = await this.iotService.fetchDevices(filter, false);
                     // console.log('ETLFunctionService.execute, devices: >> ', devices);
                     if(devices && devices[0]){
                         const filter = {
                             "where": {
-                                "tenantId": process.env.TENANT_ID,
-                                "accountId": devices[0].accountId,
                                 "metadata.entityType": "DEVICE",
-                                "metadata.entityCategoryId": {"inq": [devices[0].deviceCategoryId]}
+                                "metadata.entityCategoryId": [devices[0].deviceCategoryId]
                             },
                             "offset": 0,
                             "limit": 100,
                             "skip": 0
                             };
                           
-                            etlFunctions = await this.iotService.fetchETLFunctions(filter, true);
+                            etlFunctions = await this.iotService.fetchETLFunctions(filter, false);
+                            await this.commonService.setItemInCache(cacheKey, etlFunctions);
                     }                
                }
-
+               
                if(etlFunctions && etlFunctions.length > 0 ){
                     etlFunctions.forEach(etlFunction => {
                         if(etlFunction && etlFunction.content && etlFunction.content.payload){
@@ -67,12 +66,13 @@ export class ETLFunctionService implements ETLFunctionServiceI {
                             let transFunc: Function = new Function('return ' +functStr)();
                             // console.log('transFunc: >> ', transFunc);
                             payload = transFunc(this, payload);
+                            if(payload && !payload.entityCategoryId){
+                                payload.entityCategoryId = etlFunction.metadata.entityCategoryId;
+                                payload.entityType = etlFunction.metadata.entityType;
+                            }
                         }                                
-                    });
-                    await this.commonService.setItemInCache(cacheKey, etlFunctions);
-                }else{
-                    await this.commonService.setItemInCache(cacheKey, undefined);
-                } 
+                    });                    
+                }
             }
         }catch(error){
             console.error(error);

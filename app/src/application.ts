@@ -16,6 +16,7 @@ import { ServiceBindings, UtilityBindings } from './keys';
 import { CommonService, RuleService, RadioService, GatewayService, AuthServiceProvider, DataFlowService, ETLFunctionService } from './services';
 import { IoTService } from './services/iot.service';
 import { AuthDataSource } from './datasources';
+import { EntityDataService } from './services/entityData.service';
 
 export {ApplicationConfig};
 
@@ -52,6 +53,7 @@ export class EdgeGatewayApplication extends BootMixin(
     this.bind(ServiceBindings.GATEWAY_SERVICE).toClass(GatewayService).inScope(BindingScope.SINGLETON);
     this.bind(ServiceBindings.IOT_SERVICE).toClass(IoTService).inScope(BindingScope.SINGLETON);
     this.bind(ServiceBindings.AUTH_SERVICE).toProvider(AuthServiceProvider).inScope(BindingScope.SINGLETON);
+    this.bind(ServiceBindings.ENTITY_DATA_SERVICE).toClass(EntityDataService).inScope(BindingScope.SINGLETON);
 
 
     this.projectRoot = __dirname;

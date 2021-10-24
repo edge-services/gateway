@@ -73,6 +73,25 @@ sudo hcitool -i hci0 lescan
 
 ```
 
+## InfluxDB
+
+```
+docker run -p 8086:8086 \
+      --name influxdb2 \
+      -v influxdb2:/var/lib/influxdb2 \
+      -v $PWD/influxdb2:/var/lib/influxdb2 \
+      -v $PWD/config:/etc/influxdb2 \
+      -e DOCKER_INFLUXDB_INIT_MODE=upgrade \
+      -e DOCKER_INFLUXDB_INIT_USERNAME=sinny777 \
+      -e DOCKER_INFLUXDB_INIT_PASSWORD=1SatnamW \
+      -e DOCKER_INFLUXDB_INIT_ORG=IBM \
+      -e DOCKER_INFLUXDB_INIT_BUCKET=smartthings \
+      influxdb:2.0
+
+```
+
+'/var/lib/influxdb/meta/meta.db' does not exist
+
 
 ## Refrences
 

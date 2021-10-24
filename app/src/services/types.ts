@@ -1,4 +1,4 @@
-import { SystemInfo } from "../models";
+import { Attribute, EntityData, EntityType, SystemInfo } from "../models";
 
 export interface CommonServiceI {
     getSystemDetails(): Promise<any> ;
@@ -39,10 +39,16 @@ export interface DataFlowServiceI {
     execute(payload: any): Promise<any>;
 }
 
+export interface EntityDataServiceI {
+    insert(payload: EntityData): Promise<any>;
+}
+
 export interface IoTServiceI {
     initService(): void;  
     syncWithCloud(): Promise<void>; 
-    fetchDevices(filter: any, local: boolean): Promise<any>;
-    fetchETLFunctions(payload: any, local: boolean): Promise<any> ; 
-    fetchRules(payload: any, local: boolean): Promise<any> ;   
+    fetchDevices(filter: any, isOnline: boolean): Promise<any>;
+    fetchETLFunctions(payload: any, isOnline: boolean): Promise<any> ; 
+    fetchRules(payload: any, isOnline: boolean): Promise<any> ; 
+    fetchAttributes(entityType: EntityType, payload: any, isOnline: boolean): Promise<Attribute[]> ;   
+    getMetaData(payload: any): Promise<any>;
 }
