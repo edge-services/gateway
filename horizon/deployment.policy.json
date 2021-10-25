@@ -17,7 +17,8 @@
   "constraints": [
     "model == \"Rpi4\"",
     "hasRadio == true",
-    "isGateway == true"
+    "isGateway == true",
+    "InfluxDB == true"
   ],
   "userInput": [
     {
@@ -26,27 +27,19 @@
       "serviceVersionRange": "[1.0.0,INFINITY)",
       "inputs": [
         {
-          "name": "DB_CONNECTOR",
-          "value": "mongodb"
+          "name": "INFLUXDB_URL",
+          "value": "http://localhost:8086"
         },
         {
-          "name": "DB_HOST",
-          "value": "localhost"
+          "name": "INFLUXDB_TOKEN",
+          "value": "SatnamWaheguruJi1"
         },
         {
-          "name": "DB_PORT",
-          "value": "27017"
+          "name": "INFLUXDB_ORG",
+          "value": "IBM"
         },
         {
-          "name": "DB_USERNAME",
-          "value": "sinny777"
-        },
-        {
-          "name": "DB_PASSWORD",
-          "value": "1SatnamW"
-        },
-        {
-          "name": "DB_NAME",
+          "name": "INFLUXDB_BUCKET",
           "value": "smartthings"
         },
         {
@@ -60,23 +53,23 @@
         {
           "name": "AUTH_API_URL",
           "value": "https://smartthings-auth.mybluemix.net/api"
-      },
-      {
-          "name": "IOT_API_URL",
-          "value": "https://smartthings-iot.mybluemix.net/api"
-      },
-      {
-          "name": "TENANT_ID",
-          "value": "ibm"
-      },
-      {
-          "name": "CLIENT_ID",
-          "value": "EdgeApplication"
-      },
-      {
-          "name": "CLIENT_SECRET",
-          "value": "b187fe84-5e0e-44e6-af1f-a65a5fe31f5f"
-      }
+        },
+        {
+            "name": "IOT_API_URL",
+            "value": "https://smartthings-iot.mybluemix.net/api"
+        },
+        {
+            "name": "TENANT_ID",
+            "value": "ibm"
+        },
+        {
+            "name": "CLIENT_ID",
+            "value": "EdgeApplication"
+        },
+        {
+            "name": "CLIENT_SECRET",
+            "value": "41b5c0b8-7482-4c46-b323-8458f1cf3ed0"
+        }
       ]
     }
   ]

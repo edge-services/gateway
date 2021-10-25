@@ -4,7 +4,8 @@
     "constraints": [
       "model == \"Rpi4\"",
       "hasRadio == true",
-      "isGateway == true"
+      "isGateway == true",
+      "InfluxDB == true"
     ]
 }
   

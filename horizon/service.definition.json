@@ -9,47 +9,35 @@
     "arch": "$ARCH",
     "sharable": "multiple",
     "requiredServices": [{
-        "url": "edge-mongo",
+        "url": "edge-influx",
         "org": "$HZN_ORG_ID",
         "versionRange": "[0.0.0,INFINITY)",
         "arch": "$ARCH"
     }],
     "userInput": [
         {
-            "name": "DB_CONNECTOR",
-            "label": "DB Connector",
+            "name": "INFLUXDB_URL",
+            "label": "INFLUXDB_URL",
             "type": "string",
-            "defaultValue": "mongodb"
+            "defaultValue": "http://localhost:8086"
         },
         {
-            "name": "DB_HOST",
-            "label": "DB Host",
+            "name": "INFLUXDB_TOKEN",
+            "label": "INFLUXDB_TOKEN",
             "type": "string",
-            "defaultValue": "edge-mongo"
+            "defaultValue": "SatnamWaheguruJi1"
         },
         {
-            "name": "DB_PORT",
-            "label": "DB Port",
+            "name": "INFLUXDB_ORG",
+            "label": "INFLUXDB_ORG",
             "type": "string",
-            "defaultValue": "27017"
+            "defaultValue": "IBM"
         },
         {
-            "name": "DB_USERNAME",
-            "label": "DB Username",
+            "name": "INFLUXDB_BUCKET",
+            "label": "INFLUXDB_BUCKET",
             "type": "string",
-            "defaultValue": "sinny777"
-        },
-        {
-            "name": "DB_PASSWORD",
-            "label": "DB Password",
-            "type": "string",
-            "defaultValue": "1SatnamW"
-        },
-        {
-            "name": "DB_NAME",
-            "label": "DB Name",
-            "type": "string",
-            "defaultValue": "edgedb"
+            "defaultValue": "smartthings"
         },
         {
             "name": "SIMULATE",
@@ -91,7 +79,7 @@
             "name": "CLIENT_SECRET",
             "label": "CLIENT_SECRET",
             "type": "string",
-            "defaultValue": "b187fe84-5e0e-44e6-af1f-a65a5fe31f5f"
+            "defaultValue": "41b5c0b8-7482-4c46-b323-8458f1cf3ed0"
         }
     ],
     "deployment": {
