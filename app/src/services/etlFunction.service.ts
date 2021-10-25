@@ -24,12 +24,6 @@ export class ETLFunctionService implements ETLFunctionServiceI {
     async execute(payload: any): Promise<any>{
         // console.log('In ETLFunctionService.execute, payload: >> ', payload);
         try{
-            payload = JSON.parse(payload);
-        }catch(error){
-            // console.log('INVLAID JSON DATA: >> ', payload);
-        }
-
-        try{
             if(payload['type'] && payload['uniqueId']){
                const cacheKey = `${payload['uniqueId']}_ETLFunction`;
                let etlFunctions: ETLFunction[] = await this.commonService.getItemFromCache(cacheKey);

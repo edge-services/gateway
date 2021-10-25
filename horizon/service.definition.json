@@ -40,6 +40,12 @@
             "defaultValue": "smartthings"
         },
         {
+            "name": "DB_FILE",
+            "label": "DB_FILE",
+            "type": "string",
+            "defaultValue": "/data/db.json"
+        },
+        {
             "name": "SIMULATE",
             "label": "SIMULATE",
             "type": "boolean",
@@ -90,6 +96,7 @@
                     { "HostIP": "0.0.0.0" , "HostPort": "9000:9000/tcp"}
                 ],
                 "network": "host",
+                "binds": ["/home/edge-data:/data/"],
                 "devices": ["/dev/mem:/dev/mem", "/sys/class/gpio:/sys/class/gpio"],
                 "privileged": true
             }

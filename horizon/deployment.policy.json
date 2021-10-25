@@ -43,6 +43,10 @@
           "value": "smartthings"
         },
         {
+          "name": "DB_FILE",
+          "value": "/data/db.json"
+        },
+        {
           "name": "SIMULATE",
           "value": false
         },

@@ -23,7 +23,12 @@ export class DataFlowService implements DataFlowServiceI {
 
 
     async execute(payload: any): Promise<any>{
-        // console.log('In DataFlowService.execute, payload: >> ', payload);    
+        try{
+            payload = JSON.parse(payload);
+        }catch(error){
+            // console.log('INVLAID JSON DATA: >> ', payload);
+        }
+        // console.log('In DataFlowService.execute, payload: >> ', payload); 
         try{
             if(payload['type'] && payload['uniqueId']){
                 payload = await this.etlFunctionService.execute(payload);

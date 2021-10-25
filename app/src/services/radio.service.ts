@@ -37,11 +37,16 @@ export class RadioService implements RadioServiceI {
               this.radioAvailable = true;
               this.radio.on('data', (data: any, rssi: any) => {
 				        // console.log('data:', '\'' + data.toString() + '\'', rssi);
-                console.log('\n\nData received over Radio: ' + data.toString());  
-                this.dataFlowService.execute(data.toString()).catch(error => {
-                  console.log('ERROR in DataFlow.execute: >> ');
-                  console.error(error);
-                });                
+                  console.log('\n\nData received over Radio: ' + data.toString());  
+                  try{
+                      const payload = JSON.parse(data.toString());
+                      this.dataFlowService.execute(payload).catch(error => {
+                        console.log('ERROR in DataFlowService.execute: >> ');
+                        console.error(error);
+                      });
+                  }catch(error){
+                      console.log('INVLAID JSON DATA: >> ', data.toString());
+                  }                                
               });
 
               // enable receive mode

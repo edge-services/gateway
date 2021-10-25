@@ -35,10 +35,16 @@ export class SimulatorUtility implements SimulatorUtilityI {
                         sensorData[sensor.name] = this.getRandomInclusive(sensor.config);                             
                     }; 
                     // console.log(sensorData);
-                    this.dataflowService.execute(sensorData).catch(error => {
-                        console.log('ERROR in Simulator: >> ');
+                    // sensorData = '{"type":"HB_SENSOR","uniqueId":"SB_MICRO-3C71BF4340FC","temp":26.69,"hum":55.14746,"press":988.9286,"alt":204.4888}';
+                    try{
+                        const payload = JSON.parse(sensorData);
+                        this.dataflowService.execute(payload).catch(error => {
+                            console.log('ERROR in Simulator: >> ');
+                            console.error(error);
+                        }) 
+                    }catch(error){
                         console.error(error);
-                    })                       
+                    }                                          
                 });                              
             }            
         }        
