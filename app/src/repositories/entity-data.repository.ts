@@ -27,28 +27,8 @@ export class EntityDataRepository {
       .tag('entityType', entityData.entityType)
       .tag('entityCategoryId', entityData.entityCategoryId);
       point.fields[entityData.attributeKey] = entityData.attributeValue;
-      // console.log(entityData.dataType, ', key: ',entityData.attributeKey, ' : ', entityData.attributeValue);
-      // if(entityData.dataType){
-      //   if(entityData.dataType == DataType.BOOLEAN){
-      //     point.booleanField(entityData.attributeKey, entityData.attributeValue);
-      //   }
-      //   if(entityData.dataType == DataType.DOUBLE || entityData.dataType == DataType.FLOAT){
-      //     point.floatField(entityData.attributeKey, entityData.attributeValue);
-      //   }
-      //   if(entityData.dataType == DataType.LONG || entityData.dataType == DataType.NUMBER){
-      //     point.intField(entityData.attributeKey, entityData.attributeValue);
-      //   }
-      //   if(entityData.dataType == DataType.STRING){
-      //     point.stringField(entityData.attributeKey, entityData.attributeValue);
-      //   }
-      // }else{
-      //   point.fields = {[entityData.attributeKey]: entityData.attributeValue}
-      // }
-
       point.timestamp(entityData.ts || new Date().getTime());
-      // console.log('POINT: >> ', point);
-      writeApi.writePoint(point);
-      
+      writeApi.writePoint(point);      
     });
    
     writeApi

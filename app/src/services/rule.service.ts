@@ -63,9 +63,7 @@ export class RuleService implements RuleServiceI {
                             if(event && event.params){
                                 delete payload['success-events'];  
                                 payload.event = event;                                 
-                                if(event.params && event.params.action && event.params.action == 'publish'){
-                                    this.publishToFlow(payload);                                                                 
-                                }                                    
+                                this.processActions(payload);                                   
                             }                            
                         });
                     }).catch(err => {
@@ -76,11 +74,20 @@ export class RuleService implements RuleServiceI {
                 delete payload['success-events']; 
                 return Promise.resolve(payload); 
             } catch(err){
-                // console.log("Error in Rule.execute: >>>>>>> ");
-                // console.error(err);
                 return Promise.reject(err);
             }
-        delete payload['success-events']; 
+    }
+
+    private processActions(payload: any): Promise<any>{
+        if(payload && payload.event){
+            if(payload.event.params && payload.event.params.action){
+                if(payload.event.params.action == 'publish'){
+                    this.publishToFlow(payload);                                                                 
+                }                
+            }
+        }
+        
+        return Promise.resolve(payload);
     }
 
     private async publishToFlow(payload: any){
