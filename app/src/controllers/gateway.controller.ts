@@ -59,7 +59,7 @@ export class GatewayController {
   @post('/data-flow', {
     responses: {
       '200': {
-        description: 'System Information',
+        description: 'Data Flow for processing Edge Functions and Edge Rules',
         content: {'application/json': {schema: DataflowSchema}},
       },
     },
