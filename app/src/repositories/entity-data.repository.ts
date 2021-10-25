@@ -28,7 +28,7 @@ export class EntityDataRepository {
       point.timestamp(entityData.ts || new Date().getTime());        
       point.fields[entityData.attributeKey] = entityData.attributeValue; 
     });
-    console.log(point);
+    // console.log(point);
     writeApi.writePoint(point); 
    
     writeApi
