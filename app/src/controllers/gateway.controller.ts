@@ -3,15 +3,16 @@ import {inject} from '@loopback/core';
 import { SystemInfoRepository } from '../repositories';
 import { repository } from '@loopback/repository';
 import { ServiceBindings } from '../keys';
-import { SystemInfoSchema } from './specs/gatewaay-controller.spec';
+import { DataflowSchema, SystemInfoSchema } from './specs/gatewaay-controller.spec';
 import { SystemInfo } from '../models/system-info.model';
-import { GatewayServiceI } from '../services';
+import { DataFlowServiceI, GatewayServiceI } from '../services';
 
 @api({basePath: '/api/gateway', paths: {}})
 export class GatewayController {
   constructor(
       @inject(RestBindings.Http.REQUEST) private req: Request,
       @inject(ServiceBindings.GATEWAY_SERVICE) private gatewayService: GatewayServiceI,
+      @inject(ServiceBindings.DATA_FLOW_SERVICE) private dataFlowService: DataFlowServiceI,
       @repository(SystemInfoRepository)
       private systemInfoRepository : SystemInfoRepository,
     ) {}
@@ -53,6 +54,30 @@ export class GatewayController {
     // systemInfo = await this.systemInfoRepository.create(systemInfo);
     console.log(systemInfo);
     return systemInfo;    
+  }
+
+  @post('/data-flow', {
+    responses: {
+      '200': {
+        description: 'System Information',
+        content: {'application/json': {schema: DataflowSchema}},
+      },
+    },
+  })
+  async dataFlow(
+    @requestBody({
+      content: {
+        'application/json': {
+          content: {'application/json': {schema: DataflowSchema}},
+        },
+      },
+    })
+    payload: typeof DataflowSchema,
+  ): Promise<any> {
+    console.log('IN GatewayController.dataFlow with Payload: >>> ', payload);
+    payload = await this.dataFlowService.execute(payload);
+    // systemInfo = await this.systemInfoRepository.create(systemInfo);
+    return payload;    
   }
 
 

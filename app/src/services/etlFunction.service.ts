@@ -35,19 +35,28 @@ export class ETLFunctionService implements ETLFunctionServiceI {
                let etlFunctions: ETLFunction[] = await this.commonService.getItemFromCache(cacheKey);
             //    console.log('etlFunctions from Cache: >> ', etlFunctions);
                if(!etlFunctions){
-                    const filter = {
+                    let entityCategoryId = undefined;
+                    if(payload.entityCategoryId && (payload.entityCategoryId != undefined || payload.entityCategoryId.length > 0)){
+                        entityCategoryId = payload.entityCategoryId;
+                    }else{
+                        const filter = {
                             "where": {
                                 "deviceSerialNo": payload['uniqueId']
                             }
                         };
                       
-                    const devices: any[] = await this.iotService.fetchDevices(filter, false);
-                    // console.log('ETLFunctionService.execute, devices: >> ', devices);
-                    if(devices && devices[0]){
+                        const devices: any[] = await this.iotService.fetchDevices(filter, false);
+                        // console.log('ETLFunctionService.execute, devices: >> ', devices);
+                        if(devices && devices[0]){
+                            entityCategoryId = devices[0].deviceCategoryId;
+                        }
+                    }
+                    
+                    if(entityCategoryId){
                         const filter = {
                             "where": {
                                 "metadata.entityType": "DEVICE",
-                                "metadata.entityCategoryId": [devices[0].deviceCategoryId]
+                                "metadata.entityCategoryId": entityCategoryId
                             },
                             "offset": 0,
                             "limit": 100,
