@@ -7,10 +7,10 @@
                 {
                     "frequency": "*/5 * * * * *",
                     "sensors": [
-                        {"name": "hum", "config" : {"min": 64, "max": 69}},
-                        {"name": "temp", "config": {"min": 30, "max": 35}},
+                        {"name": "hum", "config" : {"min": 50, "max": 69}},
+                        {"name": "temp", "config": {"min": 25, "max": 40}},
                         {"name": "press", "config": {"min": 974, "max": 976}},
-                        {"name": "alt", "config": {"min": 304, "max": 306}}                       
+                        {"name": "alt", "config": {"min": 300, "max": 320}}                       
                     ]  
                 }            
             ]            

@@ -24,8 +24,8 @@ export class GatewayService implements GatewayServiceI {
     await this.iotService.initService();  
     
     console.log('systemInfo: >> ', systemInfo); 
-    await this.commonService.setItemInCache('isOnline', isOnline); 
-    // await this.commonService.setItemInCache('isOnline', false);  
+    // await this.commonService.setItemInCache('isOnline', isOnline); 
+    await this.commonService.setItemInCache('isOnline', false);  
     await this.syncWithCloud();  
   }
 

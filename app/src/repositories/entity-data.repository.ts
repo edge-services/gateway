@@ -21,15 +21,15 @@ export class EntityDataRepository {
     const writeApi = this.client.getWriteApi(this.dataSource.defaultConfig.org, this.dataSource.defaultConfig.bucket);
 
     const point = new Point('entityData');
-    point.fields = {};
-    entityDataList.forEach(entityData => {
+    entityDataList.forEach(entityData => {      
       point.tag('entityId', entityData.entityId)
       .tag('entityType', entityData.entityType)
       .tag('entityCategoryId', entityData.entityCategoryId);
-      point.fields[entityData.attributeKey] = entityData.attributeValue;
-      point.timestamp(entityData.ts || new Date().getTime());
-      writeApi.writePoint(point);      
+      point.timestamp(entityData.ts || new Date().getTime());        
+      point.fields[entityData.attributeKey] = entityData.attributeValue; 
     });
+    console.log(point);
+    writeApi.writePoint(point); 
    
     writeApi
         .close()
