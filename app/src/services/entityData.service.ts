@@ -40,8 +40,6 @@ export class EntityDataService implements EntityDataServiceI {
                 };   
             attributes = await this.iotService.fetchAttributes(payload.entityType, filter, false);
             await this.commonService.setItemInCache(cacheKey, attributes);
-        }else{
-            console.log('Attributes fetched from Cache: >> ', attributes.length);
         }
         
         let entityDataList: EntityData[] = [];

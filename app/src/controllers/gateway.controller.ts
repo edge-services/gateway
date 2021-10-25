@@ -76,7 +76,7 @@ export class GatewayController {
   ): Promise<any> {
     console.log('IN GatewayController.dataFlow with Payload: >>> ', payload);
     try{
-      this.dataFlowService.execute(payload);
+      return this.dataFlowService.execute(payload);
     }catch(error){
       Promise.reject(error);
     }    
