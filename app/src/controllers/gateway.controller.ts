@@ -75,9 +75,11 @@ export class GatewayController {
     payload: typeof DataflowSchema,
   ): Promise<any> {
     console.log('IN GatewayController.dataFlow with Payload: >>> ', payload);
-    payload = await this.dataFlowService.execute(payload);
-    // systemInfo = await this.systemInfoRepository.create(systemInfo);
-    return payload;    
+    try{
+      this.dataFlowService.execute(payload);
+    }catch(error){
+      Promise.reject(error);
+    }    
   }
 
 
