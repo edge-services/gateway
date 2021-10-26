@@ -19,3 +19,13 @@ export const SystemInfoSchema = {
       event: {type: 'object'}
     },
   };
+
+  export const EventSchema = {
+    type: 'object',
+    properties: {
+      topic: {type: 'string'},
+      metadata: {type: 'object'},
+      d: {type: 'object'},
+      event: {type: 'object'}
+    },
+  };

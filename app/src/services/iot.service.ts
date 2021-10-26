@@ -26,6 +26,7 @@ export class IoTService implements IoTServiceI {
   }
 
   async syncWithCloud(): Promise<void> {
+    await this.commonService.setItemInCache('status', 'sync'); 
     const isOnline = await this.commonService.getItemFromCache('isOnline');
     if(isOnline){
       await this.fetchAuthToken();
@@ -38,9 +39,9 @@ export class IoTService implements IoTServiceI {
       await this.syncAttributes(thisDevice.accountId, deviceCategoryIds, isOnline);      
       await this.syncETLFunctions(thisDevice.accountId, deviceCategoryIds, isOnline);
       const rules = await this.syncRules(thisDevice.accountId, deviceCategoryIds, isOnline);
-      this.ruleService.formatNAddRules(rules);      
+      await this.ruleService.formatNAddRules(rules);      
     }
-    
+    await this.commonService.setItemInCache('status', 'completed'); 
   }
 
   private async fetchAuthToken(): Promise<void> {

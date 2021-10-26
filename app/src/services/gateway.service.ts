@@ -30,7 +30,7 @@ export class GatewayService implements GatewayServiceI {
   }
 
   async syncWithCloud(): Promise<void> {
-    await this.iotService.syncWithCloud(); 
+    await this.iotService.syncWithCloud();     
   }
 
   async getSystemInformation(valueObject: any): Promise<SystemInfo>{   

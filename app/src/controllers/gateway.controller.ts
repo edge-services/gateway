@@ -3,7 +3,7 @@ import {inject} from '@loopback/core';
 import { SystemInfoRepository } from '../repositories';
 import { repository } from '@loopback/repository';
 import { ServiceBindings } from '../keys';
-import { DataflowSchema, SystemInfoSchema } from './specs/gatewaay-controller.spec';
+import { DataflowSchema, EventSchema, SystemInfoSchema } from './specs/gatewaay-controller.spec';
 import { SystemInfo } from '../models/system-info.model';
 import { DataFlowServiceI, GatewayServiceI } from '../services';
 
@@ -82,5 +82,31 @@ export class GatewayController {
     }    
   }
 
+
+  @post('/event', {
+    responses: {
+      '200': {
+        description: 'Some Event triggered...',
+        content: {'application/json': {schema: EventSchema}},
+      },
+    },
+  })
+  async eventTriggered(
+    @requestBody({
+      content: {
+        'application/json': {
+          content: {'application/json': {schema: EventSchema}},
+        },
+      },
+    })
+    payload: typeof EventSchema,
+  ): Promise<any> {
+    console.log('IN GatewayController.eventTriggered with Payload: >>> ', payload);
+    try{
+      return this.gatewayService.syncWithCloud();
+    }catch(error){
+      Promise.reject(error);
+    }    
+  }
 
 }

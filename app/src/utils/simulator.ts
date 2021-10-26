@@ -37,8 +37,8 @@ export class SimulatorUtility implements SimulatorUtilityI {
                     // console.log(sensorData);
                     // sensorData = '{"type":"HB_SENSOR","uniqueId":"SB_MICRO-3C71BF4340FC","temp":26.69,"hum":55.14746,"press":988.9286,"alt":204.4888}';
                     try{
-                        const payload = JSON.parse(sensorData);
-                        this.dataflowService.execute(payload).catch(error => {
+                        // const payload = JSON.parse(JSON.stringify(sensorData));
+                        this.dataflowService.execute(sensorData).catch(error => {
                             console.log('ERROR in Simulator: >> ');
                             console.error(error);
                         }) 

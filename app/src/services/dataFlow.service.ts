@@ -1,5 +1,5 @@
 import { ServiceBindings } from '../keys';
-import { ETLFunctionServiceI, RuleServiceI } from './types';
+import { CommonServiceI, ETLFunctionServiceI, RuleServiceI } from './types';
 import {bind, inject, BindingScope} from '@loopback/core';
 import { Engine, Rule } from 'json-rules-engine';
 import moment from 'moment';
@@ -17,6 +17,7 @@ export class DataFlowService implements DataFlowServiceI {
         @inject(ServiceBindings.ETLFUNCTION_SERVICE) private etlFunctionService: ETLFunctionServiceI,
         @inject(ServiceBindings.RULE_SERVICE) private ruleService: RuleServiceI,
         @inject(ServiceBindings.ENTITY_DATA_SERVICE) private entityDataService: EntityDataServiceI,
+        @inject(ServiceBindings.COMMON_SERVICE) private commonService: CommonServiceI,
     ) {
         this.moment = moment;
     }
@@ -28,7 +29,14 @@ export class DataFlowService implements DataFlowServiceI {
         }catch(error){
             // console.log('INVLAID JSON DATA: >> ', payload);
         }
-        // console.log('In DataFlowService.execute, payload: >> ', payload); 
+        // console.log('In DataFlowService.execute, payload: >> ', payload);
+        
+        const status: string = await this.commonService.getItemFromCache('status');
+        if(status && status != 'completed'){
+            console.log('Wait .... ', status, ' in progress....');
+            return Promise.reject('Waiting for Gateway to start/update');
+        }
+
         try{
             if(payload['type'] && payload['uniqueId']){
                 payload = await this.etlFunctionService.execute(payload);
