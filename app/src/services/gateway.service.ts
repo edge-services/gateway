@@ -30,7 +30,10 @@ export class GatewayService implements GatewayServiceI {
   }
 
   async syncWithCloud(): Promise<void> {
-    await this.iotService.syncWithCloud();     
+    await this.commonService.setItemInCache('status', 'SYNC'); 
+    const status = await this.iotService.syncWithCloud();
+    await this.commonService.setItemInCache('status', status);
+    console.log('\n\n<<<<<< SYNC COMPLETED >>>>>>\n\n');      
   }
 
   async getSystemInformation(valueObject: any): Promise<SystemInfo>{   

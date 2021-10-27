@@ -41,7 +41,7 @@ export class SimulatorUtility implements SimulatorUtilityI {
                         this.dataflowService.execute(sensorData).catch(error => {
                             console.log('ERROR in Simulator: >> ');
                             console.error(error);
-                        }) 
+                        }); 
                     }catch(error){
                         console.error(error);
                     }                                          

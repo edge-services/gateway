@@ -45,7 +45,7 @@ export interface EntityDataServiceI {
 
 export interface IoTServiceI {
     initService(): void;  
-    syncWithCloud(): Promise<void>; 
+    syncWithCloud(): Promise<any>; 
     fetchDevices(filter: any, isOnline: boolean): Promise<any>;
     fetchETLFunctions(payload: any, isOnline: boolean): Promise<any> ; 
     fetchRules(payload: any, isOnline: boolean): Promise<any> ; 

@@ -17,7 +17,7 @@ export class EntityDataRepository {
     if(!entityDataList || entityDataList.length == 0){
         return Promise.reject('Nothing to save for EntityData !');
     }
-    console.log('IN EntityDataRepository.insert, entityData count >> ', entityDataList.length);
+    // console.log('IN EntityDataRepository.insert, entityData count >> ', entityDataList.length);
     const writeApi = this.client.getWriteApi(this.dataSource.defaultConfig.org, this.dataSource.defaultConfig.bucket);
 
     const point = new Point('entityData');
@@ -34,7 +34,7 @@ export class EntityDataRepository {
     writeApi
         .close()
         .then(() => {
-            console.log('WRITE FINISHED');
+            // console.log('WRITE FINISHED');
             Promise.resolve();
         })
         .catch(e => {

@@ -25,8 +25,7 @@ export class IoTService implements IoTServiceI {
     console.log(' IN IoTService.initService: >>>>>> ');       
   }
 
-  async syncWithCloud(): Promise<void> {
-    await this.commonService.setItemInCache('status', 'sync'); 
+  async syncWithCloud(): Promise<any> {
     const isOnline = await this.commonService.getItemFromCache('isOnline');
     if(isOnline){
       await this.fetchAuthToken();
@@ -40,22 +39,24 @@ export class IoTService implements IoTServiceI {
       await this.syncETLFunctions(thisDevice.accountId, deviceCategoryIds, isOnline);
       const rules = await this.syncRules(thisDevice.accountId, deviceCategoryIds, isOnline);
       await this.ruleService.formatNAddRules(rules);      
-    }
-    await this.commonService.setItemInCache('status', 'completed'); 
+    } 
+    return Promise.resolve('COMPLETED');   
   }
 
   private async fetchAuthToken(): Promise<void> {
     let tokenData = await this.commonService.getItemFromCache('token');
     if(tokenData && process.env.TENANT_ID){
-      console.log('VERIFY or REFRESH TOKEN: >> ', tokenData);
-      tokenData = this.authService.refreshAuthToken(process.env.TENANT_ID, tokenData.principal.id, tokenData.refreshToken);      
+      // console.log('VERIFY or REFRESH TOKEN: >> ', tokenData);
+      tokenData = await this.authService.refreshAuthToken(process.env.TENANT_ID, tokenData.principal.id, tokenData.refreshToken); 
+      console.log('TOKEN REFRESHED >>>>>>> ');       
     }else{
       if(process.env.CLIENT_ID && process.env.CLIENT_SECRET){
-        tokenData = await this.authService.getClientToken(process.env.CLIENT_ID, process.env.CLIENT_SECRET);        
+        tokenData = await this.authService.getClientToken(process.env.CLIENT_ID, process.env.CLIENT_SECRET);            
       }
     }
     this.commonService.setItemInCache('token', tokenData);
     await this.setHeader(tokenData.token);
+    Promise.resolve();
   }
 
   private async setHeader(access_token: string): Promise<void>{
@@ -216,7 +217,7 @@ export class IoTService implements IoTServiceI {
       }
       // console.log('gatewayDevice: >> ', gatewayDevice);      
     }
-    return gatewayDevice;
+    return Promise.resolve(gatewayDevice);
   }
 
   async fetchDevices(filter: any, isOnline: boolean): Promise<any> {

@@ -32,7 +32,7 @@ export class DataFlowService implements DataFlowServiceI {
         // console.log('In DataFlowService.execute, payload: >> ', payload);
         
         const status: string = await this.commonService.getItemFromCache('status');
-        if(status && status != 'completed'){
+        if(status && status != 'COMPLETED'){
             console.log('Wait .... ', status, ' in progress....');
             return Promise.reject('Waiting for Gateway to start/update');
         }
