@@ -48,7 +48,7 @@ export class IoTService implements IoTServiceI {
     let tokenData = await this.commonService.getItemFromCache('token');
     if(tokenData && process.env.TENANT_ID){
       console.log('VERIFY or REFRESH TOKEN: >> ', tokenData);
-      tokenData = this.authService.refreshAuthToken(process.env.TENANT_ID, tokenData.principalId, tokenData.refreshToken);      
+      tokenData = this.authService.refreshAuthToken(process.env.TENANT_ID, tokenData.principal.id, tokenData.refreshToken);      
     }else{
       if(process.env.CLIENT_ID && process.env.CLIENT_SECRET){
         tokenData = await this.authService.getClientToken(process.env.CLIENT_ID, process.env.CLIENT_SECRET);        
