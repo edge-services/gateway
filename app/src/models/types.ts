@@ -63,7 +63,7 @@
     CLOUD = 'cloud'    
   }
 
-  export enum NotificationStrateyWhen {
+  export enum NotificationStrategyWhen {
     EVERY_TIME = 'every-time',
     BECOMES_TRUE = 'becomes-true',
     PERSISTS = 'persists',

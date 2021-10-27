@@ -5,12 +5,14 @@ import { Engine, Rule } from 'json-rules-engine';
 import moment from 'moment';
 // const moment = require('moment');
 import fetch from 'cross-fetch';
+import { NotificationStrategy, NotificationStrategyWhen } from '../models';
 
 @bind({scope: BindingScope.SINGLETON})
 export class RuleService implements RuleServiceI {
 
     engine: Engine;
     moment = moment;
+    private eventsQueue = Array();
 
     constructor(
         @inject(ServiceBindings.COMMON_SERVICE) private commonService: CommonServiceI
@@ -80,14 +82,40 @@ export class RuleService implements RuleServiceI {
 
     private processActions(payload: any): Promise<any>{
         if(payload && payload.event){
-            if(payload.event.params && payload.event.params.action){
-                if(payload.event.params.action == 'publish'){
-                    this.publishToFlow(payload);                                                                 
-                }                
+            if(payload.event.params && payload.event.params.publish){
+                if(payload.event.params.publish.when == NotificationStrategyWhen.EVERY_TIME){
+                    this.publishToFlow(payload);                                                                
+                }
+                if(payload.event.params.publish.when == NotificationStrategyWhen.X_IN_Y){
+                    this.handleXInY(payload, payload.event.params.publish);                                                                
+                }              
             }
         }
         
         return Promise.resolve(payload);
+    }
+
+    private async handleXInY(payload: any, publishConfig: NotificationStrategy){
+        // console.log("Event Triggered for data: ", data, ", Event: ", event);                                   
+        const timeNow = new Date();        
+        const key = 'ALERT_'+payload.entityId;
+        let alert = await this.commonService.getItemFromCache(key);
+        let count = 1;
+        let seconds: number;
+        if(alert){
+            count = alert.count + 1;
+            seconds = (timeNow.getTime() - alert.time.getTime()) / 1000;
+        }else{
+            seconds = (timeNow.getTime() - timeNow.getTime()) / 1000; 
+        }
+        
+        if(publishConfig.timePeriod && seconds < publishConfig.timePeriod && count == publishConfig.count){
+            this.publishToFlow(payload);
+            await this.commonService.setItemInCache(key, {time: timeNow, count: 0});
+        }else{
+            await this.commonService.setItemInCache(key, {time: timeNow, count: count});
+        }
+        
     }
 
     private async publishToFlow(payload: any){

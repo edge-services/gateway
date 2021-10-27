@@ -1,5 +1,5 @@
 import { model, property} from '@loopback/repository';
-import { NotificationStrateyWhen } from './types';
+import { NotificationStrategyWhen } from './types';
 
 @model({
     name: 'rule-event-param'
@@ -43,12 +43,12 @@ export class NotificationStrategy {
   @property({
     type: 'string',
     required: true,
-    default: NotificationStrateyWhen.EVERY_TIME,
+    default: NotificationStrategyWhen.EVERY_TIME,
     jsonSchema: {
-      enum: Object.values(NotificationStrateyWhen),
+      enum: Object.values(NotificationStrategyWhen),
     }
   })
-  when: NotificationStrateyWhen;
+  when: NotificationStrategyWhen;
 
   @property({
     type: 'number',    
