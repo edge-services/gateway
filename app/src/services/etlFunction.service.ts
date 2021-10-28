@@ -46,7 +46,7 @@ export class ETLFunctionService implements ETLFunctionServiceI {
                         }
                     }
                     
-                    if(entityCategoryId){
+                    if(entityCategoryId && entityCategoryId != undefined && entityCategoryId.length > 0){
                         const filter = {
                             "where": {
                                 "metadata.entityType": "DEVICE",

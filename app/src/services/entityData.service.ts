@@ -2,7 +2,7 @@ import { ServiceBindings } from '../keys';
 import { CommonServiceI, ETLFunctionServiceI, IoTServiceI, RuleServiceI } from './types';
 import {bind, inject, BindingScope} from '@loopback/core';
 import { EntityDataServiceI } from '.';
-import { Attribute, DataType, EntityData } from '../models';
+import { Attribute, AttributeType, DataType, EntityData } from '../models';
 import { InfluxDB, Point } from '@influxdata/influxdb-client';
 import { EntityDataRepository } from '../repositories';
 import { repository } from '@loopback/repository';
@@ -32,7 +32,8 @@ export class EntityDataService implements EntityDataServiceI {
             const filter = {
                 "where": {
                     "entityType": payload.entityType,
-                    "entityCategoryId": payload.entityCategoryId
+                    "entityCategoryId": payload.entityCategoryId,
+                    "type" : AttributeType.TELEMETRY
                 },
                 "offset": 0,
                 "limit": 500,
@@ -71,7 +72,7 @@ export class EntityDataService implements EntityDataServiceI {
             return this.entityDataRepository.insert(entityDataList);
 
         }else{
-           return Promise.reject("No Attributes for the EntityCategoryId: " +payload.entityCategoryId);
+           return Promise.resolve("No Attributes for the EntityCategoryId: " +payload.entityCategoryId);
         }
     
     }

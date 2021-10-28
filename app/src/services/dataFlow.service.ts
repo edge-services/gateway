@@ -43,7 +43,9 @@ export class DataFlowService implements DataFlowServiceI {
                 payload = await this.ruleService.execute(payload).catch(error => {
                     console.error(error);
                 });
-                return await this.entityDataService.insert(payload);
+                
+                const saveResult = await this.entityDataService.insert(payload);
+                return Promise.resolve("SUCCESS");
              }
             //  return Promise.resolve(payload);
         }catch(error){
