@@ -12,8 +12,7 @@ export class RuleService implements RuleServiceI {
 
     engine: Engine;
     moment = moment;
-    private eventsQueue = Array();
-
+    
     constructor(
         @inject(ServiceBindings.COMMON_SERVICE) private commonService: CommonServiceI
     ) {
@@ -56,16 +55,16 @@ export class RuleService implements RuleServiceI {
 
     async execute(payload: any): Promise<void> {    
         try{
-            // console.log('IN RuleService.execute, payload: >> ', payload);                
+            console.log('IN RuleService.execute, payload: >> ', payload);                
                 if(payload){
                     this.engine
                     .run(payload)
                     .then(results => {
-                        results.events.map(event => {
+                        results.events.map(async event => {
                             if(event && event.params){
                                 delete payload['success-events'];  
                                 payload.event = event;                                 
-                                this.processActions(payload);                                   
+                                await this.processActions(payload);                                   
                             }                            
                         });
                     }).catch(err => {
@@ -81,6 +80,7 @@ export class RuleService implements RuleServiceI {
     }
 
     private processActions(payload: any): Promise<any>{
+        // console.log("Event Triggered for payload: ", payload); 
         if(payload && payload.event){
             if(payload.event.params && payload.event.params.publish){
                 if(payload.event.params.publish.when == NotificationStrategyWhen.EVERY_TIME){
@@ -96,7 +96,6 @@ export class RuleService implements RuleServiceI {
     }
 
     private async handleXInY(payload: any, publishConfig: NotificationStrategy){
-        // console.log("Event Triggered for data: ", data, ", Event: ", event);                                   
         const timeNow = new Date();        
         const key = 'ALERT_'+payload.entityId;
         let alert = await this.commonService.getItemFromCache(key);
@@ -119,6 +118,7 @@ export class RuleService implements RuleServiceI {
     }
 
     private async publishToFlow(payload: any){
+        // console.log("IN publishToFlow payload: ", payload); 
         if(process.env.FLOW_URL){
             console.log('IN publishToFlow: >> Event: ', payload.event);
             try{

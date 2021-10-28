@@ -22,7 +22,7 @@ export class EntityDataService implements EntityDataServiceI {
     }
 
     async insert(payload: any): Promise<any>{
-        console.log('In EntityDataService.insert, payload: >> ', payload); 
+        // console.log('In EntityDataService.insert, payload: >> ', payload); 
         if(!payload){
             return Promise.reject("No Payload to save in DB ");
         }
