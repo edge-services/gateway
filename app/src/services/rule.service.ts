@@ -101,7 +101,7 @@ export class RuleService implements RuleServiceI {
         let alert = await this.commonService.getItemFromCache(key);
         let count = 1;
         let seconds: number;
-        if(alert){
+        if(alert && alert != undefined){
             count = alert.count + 1;
             seconds = (timeNow.getTime() - alert.time.getTime()) / 1000;
         }else{
@@ -110,7 +110,8 @@ export class RuleService implements RuleServiceI {
         
         if(publishConfig.timePeriod && seconds < publishConfig.timePeriod && count == publishConfig.count){
             this.publishToFlow(payload);
-            await this.commonService.setItemInCache(key, {time: timeNow, count: 0});
+            // await this.commonService.setItemInCache(key, {time: timeNow, count: 0});
+            await this.commonService.setItemInCache(key, undefined);
         }else{
             await this.commonService.setItemInCache(key, {time: timeNow, count: count});
         }

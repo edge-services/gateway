@@ -26,7 +26,8 @@ RUN set -ex && \
         nano \
         openssl \
         openssh-client \
-        ca-certificates make
+        ca-certificates make \
+        bluetooth bluez libbluetooth-dev libudev-dev 
 
 # Install Build tools
 RUN apk add --no-cache --virtual buildtools build-base linux-headers udev python
