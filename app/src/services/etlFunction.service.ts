@@ -63,7 +63,7 @@ export class ETLFunctionService implements ETLFunctionServiceI {
                }
                
                if(etlFunctions && etlFunctions.length > 0 ){
-                    etlFunctions.forEach(etlFunction => {
+                    etlFunctions.forEach((etlFunction: any) => {
                         if(etlFunction && etlFunction.content && etlFunction.content.payload){
                             const functStr: string = etlFunction.content.payload;                                        
                             let transFunc: Function = new Function('return ' +functStr)();

@@ -33,11 +33,11 @@ export class IoTService implements IoTServiceI {
    
     const thisDevice: Device = await this.fetchCurrentDeviceData(isOnline);
     // console.log('thisDevice: >>>> ', thisDevice);
-    if(thisDevice && thisDevice.accountId){
-      const deviceCategoryIds = await this.syncDevices(thisDevice.accountId, isOnline);
-      await this.syncAttributes(thisDevice.accountId, deviceCategoryIds, isOnline);      
-      await this.syncETLFunctions(thisDevice.accountId, deviceCategoryIds, isOnline);
-      const rules = await this.syncRules(thisDevice.accountId, deviceCategoryIds, isOnline);
+    if(thisDevice && thisDevice.metadata.accountId){
+      const deviceCategoryIds = await this.syncDevices(thisDevice.metadata.accountId, isOnline);
+      await this.syncAttributes(thisDevice.metadata.accountId, deviceCategoryIds, isOnline);      
+      await this.syncETLFunctions(thisDevice.metadata.accountId, deviceCategoryIds, isOnline);
+      const rules = await this.syncRules(thisDevice.metadata.accountId, deviceCategoryIds, isOnline);
       await this.ruleService.formatNAddRules(rules);      
     } 
     return Promise.resolve('COMPLETED');   
@@ -74,8 +74,8 @@ export class IoTService implements IoTServiceI {
   private async syncDevices(accountId: string, isOnline: boolean): Promise<string[]> {
     const filter = {
       "where": {
-          "tenantId": process.env.TENANT_ID,
-          "accountId": accountId
+          "metadata.tenantId": process.env.TENANT_ID,
+          "metadata.accountId": accountId
       },
       "offset": 0,
       "limit": 10,
@@ -103,10 +103,10 @@ export class IoTService implements IoTServiceI {
   private async syncAttributes(accountId: string, deviceCategoryIds: string[], isOnline: boolean): Promise<Attribute[]> {
     const filter = {
       "where": {
-          "tenantId": process.env.TENANT_ID,
-          "accountId": accountId,
-          "entityType": "DEVICE",
-          "entityCategoryId": {"inq": deviceCategoryIds}
+          "metadata.tenantId": process.env.TENANT_ID,
+          "metadata.accountId": accountId,
+          "metadata.entityType": "DEVICE",
+          "metadata.entityCategoryId": {"inq": deviceCategoryIds}
       },
       "offset": 0,
       "limit": 500,
@@ -134,8 +134,8 @@ export class IoTService implements IoTServiceI {
   private async syncRules(accountId: string, deviceCategoryIds: string[], isOnline: boolean): Promise<Rule[]> {
     const filter = {
       "where": {
-          "tenantId": process.env.TENANT_ID,
-          "accountId": accountId,
+          "metadata.tenantId": process.env.TENANT_ID,
+          "metadata.accountId": accountId,
           "metadata.entityType": "DEVICE",
           "metadata.entityCategoryId": {"inq": deviceCategoryIds}
       },
@@ -164,8 +164,8 @@ export class IoTService implements IoTServiceI {
   private async syncETLFunctions(accountId: string, deviceCategoryIds: string[], isOnline: boolean): Promise<ETLFunction[]> {
     const filter = {
       "where": {
-          "tenantId": process.env.TENANT_ID,
-          "accountId": accountId,
+          "metadata.tenantId": process.env.TENANT_ID,
+          "metadata.accountId": accountId,
           "metadata.entityType": "DEVICE",
           "metadata.entityCategoryId": {"inq": deviceCategoryIds}
       },
@@ -194,7 +194,7 @@ export class IoTService implements IoTServiceI {
     let gatewayDevice: any;
     const filter = {
       "where": {
-          "tenantId": process.env.TENANT_ID,
+          "metadata.tenantId": process.env.TENANT_ID,
           "deviceSerialNo": await this.commonService.getSerialNumber()
       },
       "offset": 0,

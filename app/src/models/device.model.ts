@@ -2,6 +2,7 @@ import {model, property} from '@loopback/repository';
 import { UserModifiableEntity } from './user-modifiable-entity.model';
 import { Location } from './location.model';
 import { DeviceStatus } from './types';
+import { Metadata } from './metadata.model';
 
 @model({
   name: 'devices',
@@ -26,34 +27,16 @@ export class Device extends UserModifiableEntity {
   id?: string;
 
   @property({
-    type: 'string',
+    type: 'object',
     required: true
   })
-  tenantId?: string;
-
-  @property({
-    type: 'string',
-    required: false
-  })
-  manufacturerId?: string;
-
-  @property({
-    type: 'string',
-    required: false
-  })
-  accountId?: string;
+  metadata: Metadata;
 
   @property({
     type: 'string',
     required: true,
   })
   deviceCategory: string; // EntityCategory should be saved before creating Device
-
-  @property({
-    type: 'string',
-    required: true,
-  })
-  deviceCategoryId: string; // EntityCategoryId
 
   @property({
     type: 'string',
@@ -91,7 +74,7 @@ export class Device extends UserModifiableEntity {
     jsonSchema: {
       enum: Object.values(DeviceStatus),
     },
-    default: DeviceStatus.INACTIVE
+    default: DeviceStatus.ADDED
   })
   status: DeviceStatus;
 
@@ -106,7 +89,6 @@ export class Device extends UserModifiableEntity {
     required: false,
   })
   location: Location;
-
   // Define well-known properties here
 
   // Indexer property to allow additional data

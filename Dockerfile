@@ -25,6 +25,7 @@ RUN apt-get update && \
     build-essential \
     cmake \
     gcc \
+    bluetooth bluez libbluetooth-dev libudev-dev  \
     -y --no-install-recommends --fix-missing apt-utils netcat && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /app

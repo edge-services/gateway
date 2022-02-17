@@ -1,12 +1,14 @@
 import { UserModifiableEntity } from './user-modifiable-entity.model';
 import {model, property} from '@loopback/repository';
 import { EnvType } from '.';
+import { Metadata } from './metadata.model';
 
 @model({
   name: "etlFunctions",
   settings: {strict: false}
 })
 export class ETLFunction extends UserModifiableEntity {
+  
   @property({
     type: 'string',
     id: true,
@@ -15,25 +17,10 @@ export class ETLFunction extends UserModifiableEntity {
   id?: string;
 
   @property({
-    type: 'string',
+    type: 'object',
     required: true
   })
-  tenantId?: string;
-
-  @property({
-    type: 'string',
-    required: true
-  })
-  accountId?: string;
-
-  @property({
-    type: 'string',
-    required: true,
-    jsonSchema: {
-      enum: Object.values(EnvType),
-    },
-  })
-  envType: EnvType;
+  metadata: Metadata;
 
   @property({
     type: 'string',
@@ -51,25 +38,13 @@ export class ETLFunction extends UserModifiableEntity {
     type: 'object',
     required: true
   })
-  content?: any;
+  content: object;
 
   @property({
     type: 'string',
     required: false,
   })
   description?: string | undefined;
-
-  @property({
-    type: 'object',
-    required: false
-  })
-  metadata?: any;
-
-  @property({
-    type: 'string',
-    required: false,
-  })
-  tags?: string | undefined;
  
   // Define well-known properties here
 
