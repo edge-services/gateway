@@ -31,8 +31,8 @@ export class EntityDataService implements EntityDataServiceI {
         if(!attributes){
             const filter = {
                 "where": {
-                    "entityType": payload.entityType,
-                    "entityCategoryId": payload.entityCategoryId,
+                    "metadata.entityType": payload.entityType,
+                    "metadata.entityCategoryId": payload.entityCategoryId,
                     "type" : AttributeType.TELEMETRY
                 },
                 "offset": 0,
