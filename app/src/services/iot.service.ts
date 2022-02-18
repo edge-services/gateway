@@ -32,7 +32,7 @@ export class IoTService implements IoTServiceI {
     }
    
     const thisDevice: Device = await this.fetchCurrentDeviceData(isOnline);
-    // console.log('thisDevice: >>>> ', thisDevice);
+    console.log('thisDevice: >>>> ', thisDevice);
     if(thisDevice && thisDevice.metadata.accountId){
       const deviceCategoryIds = await this.syncDevices(thisDevice.metadata.accountId, isOnline);
       await this.syncAttributes(thisDevice.metadata.accountId, deviceCategoryIds, isOnline);      
@@ -86,7 +86,7 @@ export class IoTService implements IoTServiceI {
       let deviceCategoryIds: Set<string> = new Set();
       if(devices && devices.length > 0){
         devices.forEach(async device => {
-          deviceCategoryIds.add(device.deviceCategoryId);          
+          deviceCategoryIds.add(device.metadata.entityCategoryId);          
           let deviceExists: boolean = await this.deviceRepository.exists(device.id);
           if (deviceExists){
             await this.deviceRepository.replaceById(device.id, device);
