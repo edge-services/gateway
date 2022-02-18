@@ -109,7 +109,7 @@ export class RuleService implements RuleServiceI {
         }
         
         if(publishConfig.timePeriod && seconds < publishConfig.timePeriod && count == publishConfig.count){
-            this.publishToFlow(payload);
+            await this.publishToFlow(payload);
             // await this.commonService.setItemInCache(key, {time: timeNow, count: 0});
             await this.commonService.setItemInCache(key, undefined);
         }else{

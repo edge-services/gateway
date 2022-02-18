@@ -68,6 +68,11 @@ export class CommonService implements CommonServiceI {
   }
 
   async setItemInCache(key: string, value: any){
+    // if(!value){
+    //   this.appCache.clear();
+    // }else{
+    //   this.appCache.setItem(key, value, {isCachedForever: true});
+    // }    
     this.appCache.setItem(key, value, {isCachedForever: true});
   }
 
