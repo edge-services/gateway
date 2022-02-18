@@ -41,8 +41,8 @@ export class ETLFunctionService implements ETLFunctionServiceI {
                       
                         const devices: any[] = await this.iotService.fetchDevices(filter, false);
                         // console.log('ETLFunctionService.execute, devices: >> ', devices);
-                        if(devices && devices[0]){
-                            entityCategoryId = devices[0].deviceCategoryId;
+                        if(devices && devices[0] && devices[0].metadata){
+                            entityCategoryId = devices[0].metadata.entityCategoryId;
                         }
                     }
                     
@@ -81,7 +81,7 @@ export class ETLFunctionService implements ETLFunctionServiceI {
             console.error(error);
         }
         // console.log('payload: >> ', payload);
-        return payload;
+        return Promise.resolve(payload);
     }
 
 
