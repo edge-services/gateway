@@ -104,7 +104,7 @@ export class IoTService implements IoTServiceI {
     const filter = {
       "where": {
           "metadata.tenantId": process.env.TENANT_ID,
-          "metadata.accountId": accountId,
+          // "metadata.accountId": accountId,
           "metadata.entityType": "DEVICE",
           "metadata.entityCategoryId": {"inq": deviceCategoryIds}
       },
@@ -135,7 +135,7 @@ export class IoTService implements IoTServiceI {
     const filter = {
       "where": {
           "metadata.tenantId": process.env.TENANT_ID,
-          "metadata.accountId": accountId,
+          // "metadata.accountId": accountId,
           "metadata.entityType": "DEVICE",
           "metadata.entityCategoryId": {"inq": deviceCategoryIds}
       },
@@ -165,7 +165,7 @@ export class IoTService implements IoTServiceI {
     const filter = {
       "where": {
           "metadata.tenantId": process.env.TENANT_ID,
-          "metadata.accountId": accountId,
+          // "metadata.accountId": accountId,
           "metadata.entityType": "DEVICE",
           "metadata.entityCategoryId": {"inq": deviceCategoryIds}
       },

@@ -4,6 +4,7 @@
       { "name": "hasRadio", "value": true },
       { "name": "isGateway", "value": true },
       { "name": "InfluxDB", "value": true },
+      { "name": "runFlows", "value": true },
       { "name": "openhorizon.allowPrivileged", "value": true }    
     ],
     "constraints": [

@@ -15,7 +15,6 @@
   "properties": [
   ],
   "constraints": [
-    "model == \"Rpi4\"",
     "hasRadio == true",
     "isGateway == true",
     "InfluxDB == true"
@@ -72,7 +71,7 @@
         },
         {
             "name": "CLIENT_SECRET",
-            "value": "0fc5ee4a-e45c-49c5-89a3-6f5a9034e64a"
+            "value": "eac4a9da-4d3d-4e03-9265-c47f88ae35c2"
         }
       ]
     }
