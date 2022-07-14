@@ -12,14 +12,14 @@ export class DataFlowService implements DataFlowServiceI {
 
     engine: Engine;
     moment = moment;
-
+    
     constructor(
         @inject(ServiceBindings.ETLFUNCTION_SERVICE) private etlFunctionService: ETLFunctionServiceI,
         @inject(ServiceBindings.RULE_SERVICE) private ruleService: RuleServiceI,
         @inject(ServiceBindings.ENTITY_DATA_SERVICE) private entityDataService: EntityDataServiceI,
         @inject(ServiceBindings.COMMON_SERVICE) private commonService: CommonServiceI,
     ) {
-        this.moment = moment;
+        this.moment = moment;                 
     }
 
 
@@ -29,7 +29,8 @@ export class DataFlowService implements DataFlowServiceI {
         }catch(error){
             // console.log('INVLAID JSON DATA: >> ', payload);
         }
-        // console.log('In DataFlowService.execute, payload: >> ', payload);
+        console.log('In DataFlowService.execute, payload: >> ', payload);
+        // return Promise.resolve("SUCCESS");
         
         const status: string = await this.commonService.getItemFromCache('status');
         if(status && status != 'COMPLETED'){

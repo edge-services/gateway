@@ -1,7 +1,7 @@
 // import { SystemInfo } from './../models/system-info.model';
 import {bind, inject, BindingScope} from '@loopback/core';
 import { ServiceBindings } from '../keys';
-import { RadioServiceI, CommonServiceI, GatewayServiceI, IoTServiceI, RuleServiceI, AuthServiceI } from './types';
+import { RadioServiceI, CommonServiceI, GatewayServiceI, IoTServiceI, SensorTagServiceI } from './types';
 import { SystemInfo } from '../models';
 import fetch from 'cross-fetch';
 
@@ -10,7 +10,8 @@ export class GatewayService implements GatewayServiceI {
   constructor(
     @inject(ServiceBindings.COMMON_SERVICE) private commonService: CommonServiceI,
     @inject(ServiceBindings.RADIO_SERVICE) private radioService: RadioServiceI,
-    @inject(ServiceBindings.IOT_SERVICE) private iotService: IoTServiceI
+    @inject(ServiceBindings.IOT_SERVICE) private iotService: IoTServiceI,
+    @inject(ServiceBindings.SENSORTAG_SERVICE) private sensorTagService: SensorTagServiceI
   ) {}
   
   async initGateway(): Promise<void>{
@@ -20,13 +21,14 @@ export class GatewayService implements GatewayServiceI {
     if(systemInfo && systemInfo.other && systemInfo.other.internetAvailable){    
       isOnline = systemInfo.other.internetAvailable;      
     } 
-    await this.radioService.initRadio();    
+    await this.radioService.initRadio(); 
     await this.iotService.initService();  
     
     console.log('systemInfo: >> ', systemInfo); 
     await this.commonService.setItemInCache('isOnline', isOnline); 
     // await this.commonService.setItemInCache('isOnline', false);  
-    await this.syncWithCloud();  
+    await this.syncWithCloud(); 
+    await this.sensorTagService.initSensorTag();    
   }
 
   async syncWithCloud(): Promise<void> {

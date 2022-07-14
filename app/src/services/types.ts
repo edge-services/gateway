@@ -18,6 +18,10 @@ export interface RadioServiceI {
     isAvailable(): boolean;
 }
 
+export interface SensorTagServiceI {
+    initSensorTag(): void;
+}
+
 export interface GatewayServiceI {
     initGateway(): void;   
     syncWithCloud(): void;

@@ -1,5 +1,5 @@
 import {BindingKey} from '@loopback/context';
-import { CommonServiceI, RuleServiceI, RadioServiceI, GatewayServiceI, IoTServiceI, AuthServiceI, ETLFunctionServiceI, DataFlowServiceI, EntityDataServiceI } from './services/types';
+import { CommonServiceI, RuleServiceI, RadioServiceI, GatewayServiceI, IoTServiceI, AuthServiceI, ETLFunctionServiceI, DataFlowServiceI, EntityDataServiceI, SensorTagServiceI } from './services/types';
 import { SimulatorUtilityI } from './utils';
 
 export namespace ServiceBindings {
@@ -38,6 +38,10 @@ export namespace ServiceBindings {
 
   export const ENTITY_DATA_SERVICE = BindingKey.create<EntityDataServiceI | undefined>(
     'entity-data.service',
+  );
+
+  export const SENSORTAG_SERVICE = BindingKey.create<SensorTagServiceI | undefined>(
+    'sensortag.service',
   );
 
 }

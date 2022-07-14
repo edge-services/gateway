@@ -6,3 +6,5 @@ export * from './gateway.service';
 export * from './etlFunction.service';
 export * from './dataFlow.service';
 export * from './auth.service';
+export * from './entityData.service';
+export * from './sensortag.service';
