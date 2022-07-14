@@ -121,9 +121,9 @@ export class RuleService implements RuleServiceI {
     private async publishToFlow(payload: any){
         // console.log("IN publishToFlow payload: ", payload); 
         if(process.env.FLOW_URL){
-            console.log('IN publishToFlow: >> Event: ', payload.event);
             try{
                 payload.topic = 'detection';
+                console.log('IN publishToFlow: >> Payload: ', payload);
                 const response = await fetch(process.env.FLOW_URL, {
                     method: 'POST',
                     body: JSON.stringify(payload),
