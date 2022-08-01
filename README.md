@@ -3,7 +3,7 @@
 
 ### Pre-requisites
     
-    This edge service (Gateway) depends on [flows](https://github.com/edge-services/flows) and [InfluxDB](https://github.com/edge-services/Influxdb) edge services, so make sure all are registered with IEAM Agent before hand.
+This edge service (Gateway) depends on [flows](https://github.com/edge-services/flows) and [InfluxDB](https://github.com/edge-services/Influxdb) edge services, so make sure all are registered with IEAM Agent before hand.
 
 ## Register Gateway Service with IBM Edge Application Manager
 
