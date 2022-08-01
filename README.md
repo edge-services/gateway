@@ -1,52 +1,51 @@
 
 # edge-gateway service for Edge Computing
 
-## Requirements
+### Pre-requisites
+    
+    This edge service (Gateway) depends on [flows](https://github.com/edge-services/flows) and [InfluxDB](https://github.com/edge-services/Influxdb) edge services, so make sure all are registered with IEAM Agent before hand.
 
-- All devices should be able to connect to the Gateway via BLE, LoRA, XBEE or OpenThread
-- It should be able to connect to the Internet
-- It should know what all devices it can handle
-- It should save all data in raw format in local DB (DB on the Edge Device)
-- It should have a Rule-engine service running
-- Its API should be accessible via internet (might use NgRok)
+## Register Gateway Service with IBM Edge Application Manager
 
-## On Gateway Startup / Powered On
-
-- Connect with Internet ( If Available)
-- Start Gateway App + Backend DB
-- Start NgRok Service 
-- Fetch/Synchronize latest configurations for Gateway and Devices from the Cloud
-
-## Gateway Docker
-
-- Build docker image for Edge-Gateway
+    - Make sure IEAM Agent is installed and can access IEAM Hub
+    - Go inside "horizon" folder
+    - run following commands (CLI for openhorsizon)
 
 ```
 
-docker build -t sinny777/edge-gateway .
+export HZN_ORG_ID=myorg
+export HZN_EXCHANGE_USER_AUTH=admin:HjWsfSKGB9XY3XhLQPOmqpJ6eLWN3U
 
-docker run --rm -it --name edge-gateway -p 9000:9000 \
-    -e DB_CONNECTOR=mongodb \
-    -e DB_HOST=localhost \
-    -e DB_PORT=27017 \
-    -e DB_USERNAME=admin \
-    -e DB_PASSWORD=1SatnamW \
-    -e DB_NAME=admin \
-    -e SIMULATE=false \
-    -v /dev/mem:/dev/mem \
-    -v /sys/class/gpio:/sys/class/gpio \
-    --privileged \
-    sinny777/edge-gateway_arm64:1.0.0
+export ARCH=arm64
+eval $(hzn util configconv -f hzn.json) 
+
+$hzn exchange service publish -f service.definition.json -P 
+<!-- $hzn exchange service list -->
+<!-- $hzn exchange service remove ${HZN_ORG_ID}/${SERVICE_NAME}_${SERVICE_VERSION}_${ARCH} -->
+
+$hzn exchange service addpolicy -f service.policy.json ${HZN_ORG_ID}/${SERVICE_NAME}_${SERVICE_VERSION}_${ARCH}
+<!-- $hzn exchange service listpolicy ${HZN_ORG_ID}/${SERVICE_NAME}_${SERVICE_VERSION}_${ARCH} -->
+<!-- $hzn exchange service removepolicy ${HZN_ORG_ID}/${SERVICE_NAME}_${SERVICE_VERSION}_${ARCH} -->
+
+$hzn exchange deployment addpolicy -f deployment.policy.json ${HZN_ORG_ID}/policy-${SERVICE_NAME}_${SERVICE_VERSION}
+<!-- $hzn exchange deployment listpolicy ${HZN_ORG_ID}/policy-${SERVICE_NAME}_${SERVICE_VERSION} -->
+<!-- $hzn exchange deployment removepolicy ${HZN_ORG_ID}/policy-${SERVICE_NAME}_${SERVICE_VERSION} -->
+
+```
+## Gateway Docker (Standalone - for testing)
+
+- Create an .env file 
+- Run docker image for Edge-Gateway
+
+```
 
 sudo docker run --rm -it --name edge-gateway -p 9000:9000 \
-    -e SIMULATE=false \
+    --env-file .env \
+    --net host \
     -v /dev/mem:/dev/mem \
     -v /sys/class/gpio:/sys/class/gpio \
     --privileged \
     sinny777/edge-gateway_arm64:1.0.0
-
-
-sudo docker run --privileged --rm -it -p 9000:9000 --name gateway-app -v /opt:/opt -v /tmp:/tmp -e TYPE=GATEWAY -e CLOUDANT_URL=https://34fd0b82-60b8-4d0d-9231-1f03135d4273-bluemix:75ae9c3507534f29ddfd175531aa780f889f4fc858a666dcacf572b097d08849@34fd0b82-60b8-4d0d-9231-1f03135d4273-bluemix.cloudant.com hukam/gateway-app
     
 ```
 

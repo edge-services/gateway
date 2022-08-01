@@ -49,8 +49,8 @@ export class SensorTagService implements SensorTagServiceI {
           });
       }
 
-      function enableSensors() {		// attempt to enable the sensors
-        console.log('Enabling sensors');
+      function enableSensors(error: any) {		// attempt to enable the sensors
+        console.log('Enabling sensors: ', error);
         // // enable sensor:
         sensorTag.enableAccelerometer();
         sensorTag.enableBarometricPressure();
@@ -155,6 +155,7 @@ export class SensorTagService implements SensorTagServiceI {
       }
 
       sensorTag.connectAndSetUp(enableSensors);
+      console.log('CALLED connectAndSetUp >>>> ');
       // set a listener for when the keys change:
       // sensorTag.on('simpleKeyChange', reportSimpleKey);
       // set a listener for the tag disconnects:
