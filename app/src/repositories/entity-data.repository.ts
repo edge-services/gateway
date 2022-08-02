@@ -14,7 +14,7 @@ export class EntityDataRepository {
   }
 
   async insert(entityDataList: EntityData[]): Promise<any>{
-    if(!entityDataList || entityDataList.length == 0){
+    if(!entityDataList || entityDataList.length == 0 || !this.client){
         return Promise.reject('Nothing to save for EntityData !');
     }
     // console.log('IN EntityDataRepository.insert, entityData count >> ', entityDataList.length);

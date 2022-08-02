@@ -67,12 +67,12 @@ export class ETLFunctionService implements ETLFunctionServiceI {
                         if(etlFunction && etlFunction.content && etlFunction.content.payload){
                             const functStr: string = etlFunction.content.payload;                                        
                             let transFunc: Function = new Function('return ' +functStr)();
-                            // console.log('transFunc: >> ', transFunc);
                             payload = transFunc(this, payload);
                             if(payload && !payload.entityCategoryId){
                                 payload.entityCategoryId = etlFunction.metadata.entityCategoryId;
                                 payload.entityType = etlFunction.metadata.entityType;
                             }
+                            // console.log('Payload after ETL: >> ', payload);
                         }                                
                     });                    
                 }

@@ -33,13 +33,14 @@ export class EntityDataDataSource  implements LifeCycleObserver {
 
   init(): Promise<any>{
     if(config && config.url){
-         this.client = new InfluxDB({
+        this.client = new InfluxDB({
             url: config.url,
             token: config.token
         });
         return Promise.resolve(this.client);
     }else{
-        return Promise.reject("InfluxDB Config missing");
+        // return Promise.reject("InfluxDB Config missing");
+        return Promise.resolve(this.client);
     }    
   }
 

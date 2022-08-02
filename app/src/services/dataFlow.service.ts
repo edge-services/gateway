@@ -45,7 +45,10 @@ export class DataFlowService implements DataFlowServiceI {
                     console.error(error);
                 });
                 
-                const saveResult = await this.entityDataService.insert(payload);
+                if(process.env.INFLUXDB_URL){
+                    await this.entityDataService.insert(payload);
+                }
+                
                 return Promise.resolve("SUCCESS");
              }
             //  return Promise.resolve(payload);
