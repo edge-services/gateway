@@ -29,7 +29,7 @@ export class SensorTagService implements SensorTagServiceI {
   onDiscover(sensorTag: any){
     let flowService = this.dataFlowService;
     let payload: any = {type: 'TI_SensorTag', d: {}};
-    console.log('IN OnDiscover, sensorTag: >> ', sensorTag.id);
+    console.log('IN OnDiscover, sensorTag: >> ', sensorTag);
     try{
       // let that = this;
       function disconnect() {
@@ -50,7 +50,7 @@ export class SensorTagService implements SensorTagServiceI {
       }
 
       function enableSensors(error: any) {		// attempt to enable the sensors
-        console.log('Enabling sensors: ', error);
+        console.log('Enabling sensors, any error: ', error);
         // // enable sensor:
         sensorTag.enableAccelerometer();
         sensorTag.enableBarometricPressure();

@@ -55,7 +55,37 @@ Radio data received: {"type":"HB_SENSOR","uniqueId":"SB_MICRO-3C71BF4340FC","tem
 
 ## BLUETOOTH
 
+To fix issue connecting to BLE devices
+You can install it with:
+
+  - [download file](https://drive.google.com/file/d/1DVOtBjrsoR2NhwEBVn3ei0sv-xTIBCxR/view)
+
 ```
+
+$ sudo mv /lib/firmware/brcm/BCM4345C0.hcd{,.bak}
+$ sudo cp BCM4345C0_003.001.025.0171.0339.hcd /lib/firmware/brcm/BCM4345C0.hcd
+
+```
+
+Reverting to the original is simply a case of:
+
+```
+$ sudo mv /lib/firmware/brcm/BCM4345C0.hcd{.bak,}
+
+```
+
+    - Other references (thhat may help)
+
+```
+
+sudo nano /etc/bluetooth/main.conf
+# Restricts all controllers to the specified transport. Default value
+# is "dual", i.e. both BR/EDR and LE enabled (when supported by the HW).
+# Possible values: "dual", "bredr", "le"
+ControllerMode = dual
+
+
+sudo setcap cap_net_raw+eip $(eval readlink -f $(which node))
 
 hciconfig
 
