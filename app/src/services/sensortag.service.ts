@@ -17,7 +17,7 @@ export class SensorTagService implements SensorTagServiceI {
   async initSensorTag(): Promise<void>{    
     try{       
         let that = this;
-        SensorTag.discoverAll(function(device: any){
+        SensorTag.discover(function(device: any){
           that.onDiscover(device);
         });        
       }catch(err){
