@@ -3,14 +3,14 @@ import { CommonServiceI, ETLFunctionServiceI, IoTServiceI, RuleServiceI } from '
 import {bind, inject, BindingScope} from '@loopback/core';
 import { EntityDataServiceI } from '.';
 import { Attribute, AttributeType, DataType, EntityData } from '../models';
-import { InfluxDB, Point } from '@influxdata/influxdb-client';
+// import { InfluxDB, Point } from '@influxdata/influxdb-client';
 import { EntityDataRepository } from '../repositories';
 import { repository } from '@loopback/repository';
 
 @bind({scope: BindingScope.SINGLETON})
 export class EntityDataService implements EntityDataServiceI {
 
-    influx: InfluxDB;
+    // influx: InfluxDB;
 
 
     constructor(

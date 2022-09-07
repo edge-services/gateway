@@ -55,7 +55,7 @@ export class RuleService implements RuleServiceI {
 
     async execute(payload: any): Promise<void> {    
         try{
-            // console.log('IN RuleService.execute, payload: >> ', payload);                
+            console.log('IN RuleService.execute, payload: >> ', payload);                
                 if(payload){
                     this.engine
                     .run(payload)
@@ -119,9 +119,18 @@ export class RuleService implements RuleServiceI {
     }
 
     private async publishToFlow(payload: any){
-        // console.log("IN publishToFlow payload: ", payload); 
+        console.log("IN publishToFlow payload: ", payload); 
         if(process.env.FLOW_URL){
             try{
+                let result_text = '';
+                if(payload.entityId){
+                    result_text = `Device uniqueId: ${payload.entityId}\nSensors Data: ${JSON.stringify(payload.d)} `;
+                }
+                 
+                if(payload['event']){
+                    payload['event']['params']['message'] = '*' +payload['event']['params']['message'] + '*\n\n' +result_text                    
+                }
+                
                 payload.topic = 'detection';
                 console.log('IN publishToFlow: >> Payload: ', payload);
                 const response = await fetch(process.env.FLOW_URL, {

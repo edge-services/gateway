@@ -6,7 +6,7 @@ import {
 } from '@loopback/core';
 import { Cleanup } from '../utils/cleanup';
 import { ServiceBindings, UtilityBindings } from '../keys';
-import { GatewayServiceI } from './../services/types';
+import { GatewayServiceI, SensorTagServiceI } from './../services/types';
 // import { juggler } from '@loopback/repository';
 
 /**
@@ -19,7 +19,8 @@ export class GatewayLifeObserver implements LifeCycleObserver {
     // inject `app` if you need access to other artifacts by `await this.app.get()`
     @inject(CoreBindings.APPLICATION_INSTANCE) private app: Application,
     @inject(ServiceBindings.GATEWAY_SERVICE) private gatewayService: GatewayServiceI,
-    @inject(UtilityBindings.SIMULATOR_UTILITY) private simulatoreUtility: SimulatorUtilityI
+    @inject(UtilityBindings.SIMULATOR_UTILITY) private simulatoreUtility: SimulatorUtilityI,
+    @inject(ServiceBindings.SENSORTAG_SERVICE) private sensorTagService: SensorTagServiceI
   ) {}
 
   async boot(): Promise<void> {
@@ -32,7 +33,9 @@ export class GatewayLifeObserver implements LifeCycleObserver {
   async start(): Promise<void> {
     console.log('\n\n<<<<<<<<< Gateway App Started >>>>>>>>>>>\n\n');
     let cleanup = new Cleanup();
-    cleanup.init(this.cleanupOnExit);
+    cleanup.init(() => {      
+      this.cleanupOnExit();      
+    });
     await this.gatewayService.initGateway();
     if(process.env.SIMULATE && process.env.SIMULATE.toLowerCase() === 'true'){
       await this.simulatoreUtility.simulate({});
@@ -49,6 +52,7 @@ export class GatewayLifeObserver implements LifeCycleObserver {
 
   cleanupOnExit(){
 		console.log('\n\n<<<<<<<<< CALLING CLEANUP PROCESS ON EXIT >>>>>>>>> \n\n');
+    this.sensorTagService.clean();
 //		sensortagHandler.disconnectSensorTags();
 		// FACTORY.GatewayHandler().destroyGPIOs(function(err, result){
 		// 	console.log("<<<<<<< Gateway Stopped, Good Bye >>>>>>>>\n");

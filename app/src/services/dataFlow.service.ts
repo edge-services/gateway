@@ -23,14 +23,14 @@ export class DataFlowService implements DataFlowServiceI {
     }
 
 
-    async execute(payload: any): Promise<any>{
+    async execute(data: any): Promise<any>{
+        // console.log('In DataFlowService.execute, data: >> ', data);
+        let payload: any = {};
         try{
-            payload = JSON.parse(payload);
+            payload = JSON.parse(data);                     
         }catch(error){
-            // console.log('INVLAID JSON DATA: >> ', payload);
+            payload = Object.assign(payload, data);            
         }
-        console.log('In DataFlowService.execute, payload: >> ', payload);
-        // return Promise.resolve("SUCCESS");
         
         const status: string = await this.commonService.getItemFromCache('status');
         if(status && status != 'COMPLETED'){
@@ -54,6 +54,7 @@ export class DataFlowService implements DataFlowServiceI {
             //  return Promise.resolve(payload);
         }catch(error){
             console.error(error);
+            console.log('In DataFlowService.execute, ERROR, payload: >> ', payload);
             return Promise.reject(error);
         } 
         

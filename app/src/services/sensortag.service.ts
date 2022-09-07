@@ -8,10 +8,12 @@ let SensorTag = require('@sinny777/ti-sensortag');
 @bind({scope: BindingScope.SINGLETON})
 export class SensorTagService implements SensorTagServiceI {
 
+  tags: any;
+
     constructor(
       @inject(ServiceBindings.DATA_FLOW_SERVICE) private  dataFlowService: DataFlowServiceI
     ) {
-     
+     this.tags = [];
     }
 
   async initSensorTag(): Promise<void>{    
@@ -27,42 +29,21 @@ export class SensorTagService implements SensorTagServiceI {
   }
 
   onDiscover(sensorTag: any){
+    this.tags.push(sensorTag);
     let flowService = this.dataFlowService;
     let payload: any = {type: 'TI_SensorTag', d: {}};
     console.log('IN OnDiscover, sensorTag: >> ', sensorTag);
     try{
+      SensorTag.stopDiscoverAll(this.onDiscover);
+      // sensorTag.disconnect();
       // let that = this;
       function disconnect() {
         console.log('Sensortag disconnected!');
-      }
-    
-      function readBasicDetails(payload: any){
-          payload['uniqueId'] = sensorTag.id;
-          payload['model'] = sensorTag.type;
-          sensorTag.readSystemId(function(error: any, systemId: string){
-              console.log('systemId: >> ', systemId);
-              payload['systemId'] = systemId;
-          });
-          sensorTag.readSerialNumber(function(error: any, serialNumber: string){
-              console.log('serialNumber: >> ', serialNumber);
-              payload['serialNumber'] = serialNumber;
-          });
+        sensorTag.connectAndSetUp(enableSensors);
       }
 
-      function enableSensors(error: any) {		// attempt to enable the sensors
-        console.log('Enabling sensors, any error: ', error);
-        // // enable sensor:
-        sensorTag.enableAccelerometer();
-        sensorTag.enableBarometricPressure();
-        // device.enableGyroscope();
-        sensorTag.enableMagnetometer();
-        sensorTag.enableHumidity();
-        sensorTag.enableIrTemperature();		
-        sensorTag.enableLuxometer();
-        // device.enableBatterLevel();
-
-        readBasicDetails(payload);
-    
+      function resetSensorsData(payload: any){
+        payload = {type: 'TI_SensorTag', d: {}};  
         payload.d.accel_x = 0.0;
         payload.d.accel_y = 0.0;
         payload.d.accel_z = 0.0;
@@ -77,6 +58,38 @@ export class SensorTagService implements SensorTagServiceI {
         payload.d.ambientTemperature = 0.0;
         payload.d.lux = 0.0;
         payload.d.keys = {};
+        return payload;
+      }
+    
+      function readBasicDetails(payload: any){
+          payload['uniqueId'] = sensorTag.id;
+          payload['model'] = sensorTag.type;
+          sensorTag.readSystemId(function(error: any, systemId: string){
+              console.log('systemId: >> ', systemId);
+              payload['systemId'] = systemId;
+          });
+          sensorTag.readSerialNumber(function(error: any, serialNumber: string){
+              console.log('serialNumber: >> ', serialNumber);
+              payload['serialNumber'] = serialNumber;
+          });
+
+          return payload;
+      }
+
+      function enableSensors(error: any) {		// attempt to enable the sensors
+        console.log('Enabling sensors, any error: ', error);
+        // // enable sensor:
+        sensorTag.enableAccelerometer();
+        sensorTag.enableBarometricPressure();
+        // device.enableGyroscope();
+        sensorTag.enableMagnetometer();
+        sensorTag.enableHumidity();
+        sensorTag.enableIrTemperature();		
+        sensorTag.enableLuxometer();
+        // device.enableBatterLevel();
+
+        payload = resetSensorsData(payload);
+        payload = readBasicDetails(payload);
 
         // then turn on notifications:
         sensorTag.notifySimpleKey();    
@@ -87,6 +100,9 @@ export class SensorTagService implements SensorTagServiceI {
       // read all the sensors except the keys:
       function readSensors() {
         // device.readGyroscope(reportGyroscope);
+        // resetSensorsData(payload);
+        // readBasicDetails(payload);    
+        
         sensorTag.readAccelerometer(function reportAccelerometer (error: any, x: number, y: number, z: number) {
           if(error){
             payload.d.accel_x = 0;
@@ -138,8 +154,8 @@ export class SensorTagService implements SensorTagServiceI {
             payload.d.lux = +lux.toFixed(1);
           }
 
-        // sensorTag.readBatteryLevel(reportBatteryLevel);
-      });
+          // sensorTag.readBatteryLevel(reportBatteryLevel);
+        });
        
         console.log('\n\n --------------------------------------');
         // console.log(payload);
@@ -147,7 +163,7 @@ export class SensorTagService implements SensorTagServiceI {
           flowService.execute(payload).catch((error: any) => {
             console.log('ERROR in DataFlowService.execute: >> ');
             console.error(error);
-          });           
+          });                   
         }else{
           console.log(payload);
         }
@@ -165,6 +181,13 @@ export class SensorTagService implements SensorTagServiceI {
         console.log("Error in connectAndSetUp: >>>>>>> ");
         console.log(err);
     }   
+  }
+
+  clean(){
+    SensorTag.stopDiscoverAll(this.onDiscover);
+    this.tags.forEach((tag: any) => {
+      tag.disconnect();
+    });    
   }
 
 }

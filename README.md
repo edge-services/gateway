@@ -32,6 +32,33 @@ $hzn exchange deployment addpolicy -f deployment.policy.json ${HZN_ORG_ID}/polic
 <!-- $hzn exchange deployment removepolicy ${HZN_ORG_ID}/policy-${SERVICE_NAME}_${SERVICE_VERSION} -->
 
 ```
+
+## Register the Edge Node
+
+```
+
+export HZN_ORG_ID=myorg
+export HZN_EXCHANGE_USER_AUTH=admin:HjWsfSKGB9XY3XhLQPOmqpJ6eLWN3U
+
+$hzn register --policy gateway.policy.json
+
+$hzn eventlog list -f
+
+$hzn service log -f gateway
+
+$hzn unregister -f
+
+$ hzn version
+$ hzn agreement list
+$ hzn node list -v
+$ hzn exchange user list
+
+hzn --help
+hzn node --help
+hzn exchange pattern --help
+
+```
+
 ## Gateway Docker (Standalone - for testing)
 
 - Create an .env file 

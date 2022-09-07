@@ -3,7 +3,9 @@
 function noOp() {};
 
 export class Cleanup {
-    constructor(){}
+    constructor(
+      
+    ){}
 
     init(callback: any){
       callback = callback || noOp;   

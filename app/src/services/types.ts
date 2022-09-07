@@ -20,6 +20,7 @@ export interface RadioServiceI {
 
 export interface SensorTagServiceI {
     initSensorTag(): void;
+    clean(): void;
 }
 
 export interface GatewayServiceI {
