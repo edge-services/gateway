@@ -31,7 +31,7 @@ jobs:
           DOCKER_PLATFORMS=linux/amd64
           VERSION=1.0.0
           NODE_VERSION=12.22.1
-          OS=alpine
+          OS=buster-slim
           ARCH=amd64
           SUFFIX=amd64
 
