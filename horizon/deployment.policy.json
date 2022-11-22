@@ -8,12 +8,11 @@
     "serviceVersions": [
       {
         "version": "$SERVICE_VERSION",
-        "priority":{}
+        "priority": {}
       }
     ]
   },
-  "properties": [
-  ],
+  "properties": [],
   "constraints": [
     "hasRadio == true",
     "isGateway == true",
@@ -58,20 +57,20 @@
           "value": "https://smartthings-auth.mybluemix.net/api"
         },
         {
-            "name": "IOT_API_URL",
-            "value": "https://smartthings-iot.mybluemix.net/api"
+          "name": "IOT_API_URL",
+          "value": "https://smartthings-iot.mybluemix.net/api"
         },
         {
-            "name": "TENANT_ID",
-            "value": "ibm"
+          "name": "TENANT_ID",
+          "value": "ibm"
         },
         {
-            "name": "CLIENT_ID",
-            "value": "EdgeApplication"
+          "name": "CLIENT_ID",
+          "value": "EdgeApplication"
         },
         {
-            "name": "CLIENT_SECRET",
-            "value": "eac4a9da-4d3d-4e03-9265-c47f88ae35c2"
+          "name": "CLIENT_SECRET",
+          "value": "f296fb0d-503b-49ee-b460-1628ab580496"
         }
       ]
     }

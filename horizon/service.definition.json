@@ -8,12 +8,14 @@
     "version": "$SERVICE_VERSION",
     "arch": "$ARCH",
     "sharable": "multiple",
-    "requiredServices": [{
-        "url": "edge-influx",
-        "org": "$HZN_ORG_ID",
-        "versionRange": "[0.0.0,INFINITY)",
-        "arch": "$ARCH"
-    }],
+    "requiredServices": [
+        {
+            "url": "edge-influx",
+            "org": "$HZN_ORG_ID",
+            "versionRange": "[0.0.0,INFINITY)",
+            "arch": "$ARCH"
+        }
+    ],
     "userInput": [
         {
             "name": "INFLUXDB_URL",
@@ -85,19 +87,27 @@
             "name": "CLIENT_SECRET",
             "label": "CLIENT_SECRET",
             "type": "string",
-            "defaultValue": "eac4a9da-4d3d-4e03-9265-c47f88ae35c2"
+            "defaultValue": "f296fb0d-503b-49ee-b460-1628ab580496"
         }
     ],
     "deployment": {
         "services": {
             "edge-gateway": {
                 "image": "${DOCKER_IMAGE_BASE}_$ARCH:$SERVICE_VERSION",
-                "ports": [ 
-                    { "HostIP": "0.0.0.0" , "HostPort": "9000:9000/tcp"}
+                "ports": [
+                    {
+                        "HostIP": "0.0.0.0",
+                        "HostPort": "9000:9000/tcp"
+                    }
                 ],
                 "network": "host",
-                "binds": ["/home/edge-data:/data/"],
-                "devices": ["/dev/mem:/dev/mem", "/sys/class/gpio:/sys/class/gpio"],
+                "binds": [
+                    "/home/edge-data:/data/"
+                ],
+                "devices": [
+                    "/dev/mem:/dev/mem",
+                    "/sys/class/gpio:/sys/class/gpio"
+                ],
                 "privileged": true
             }
         }

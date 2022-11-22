@@ -33,6 +33,8 @@ $hzn exchange deployment addpolicy -f deployment.policy.json ${HZN_ORG_ID}/polic
 
 ```
 
+
+
 ## Register the Edge Node
 
 ```
