@@ -1,9 +1,9 @@
 import { Attribute, EntityData, EntityType, SystemInfo } from "../models";
 
 export interface CommonServiceI {
-    getSystemDetails(): Promise<any> ;
-    getSystemInformation(valueObject: any): Promise<SystemInfo> ;
-    getSerialNumber(): Promise<string> ;
+    getSystemDetails(): Promise<any>;
+    getSystemInformation(valueObject: any): Promise<SystemInfo>;
+    getSerialNumber(): Promise<string>;
     setItemInCache(key: string, content: any): Promise<void>;
     getItemFromCache(key: string): Promise<any>;
 }
@@ -24,10 +24,11 @@ export interface SensorTagServiceI {
 }
 
 export interface GatewayServiceI {
-    initGateway(): void;   
+    initGateway(): void;
+    restartGateway(): Promise<void>
     syncWithCloud(): void;
-    getSystemDetails(): Promise<any> ;
-    getSystemInformation(valueObject: any): Promise<SystemInfo> ;
+    getSystemDetails(): Promise<any>;
+    getSystemInformation(valueObject: any): Promise<SystemInfo>;
 }
 
 export interface RuleServiceI {
@@ -49,11 +50,11 @@ export interface EntityDataServiceI {
 }
 
 export interface IoTServiceI {
-    initService(): void;  
-    syncWithCloud(): Promise<any>; 
+    initService(): void;
+    syncWithCloud(): Promise<any>;
     fetchDevices(filter: any, isOnline: boolean): Promise<any>;
-    fetchETLFunctions(payload: any, isOnline: boolean): Promise<any> ; 
-    fetchRules(payload: any, isOnline: boolean): Promise<any> ; 
-    fetchAttributes(entityType: EntityType, payload: any, isOnline: boolean): Promise<Attribute[]> ;   
+    fetchETLFunctions(payload: any, isOnline: boolean): Promise<any>;
+    fetchRules(payload: any, isOnline: boolean): Promise<any>;
+    fetchAttributes(entityType: EntityType, payload: any, isOnline: boolean): Promise<Attribute[]>;
     getMetaData(payload: any): Promise<any>;
 }

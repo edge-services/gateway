@@ -1,5 +1,5 @@
-import {Request, RestBindings, get, ResponseObject, post, requestBody, getModelSchemaRef, api} from '@loopback/rest';
-import {inject} from '@loopback/core';
+import { Request, RestBindings, get, ResponseObject, post, requestBody, getModelSchemaRef, api } from '@loopback/rest';
+import { inject } from '@loopback/core';
 import { SystemInfoRepository } from '../repositories';
 import { repository } from '@loopback/repository';
 import { ServiceBindings } from '../keys';
@@ -7,22 +7,22 @@ import { DataflowSchema, EventSchema, SystemInfoSchema } from './specs/gatewaay-
 import { SystemInfo } from '../models/system-info.model';
 import { DataFlowServiceI, GatewayServiceI } from '../services';
 
-@api({basePath: '/api/gateway', paths: {}})
+@api({ basePath: '/api/gateway', paths: {} })
 export class GatewayController {
   constructor(
-      @inject(RestBindings.Http.REQUEST) private req: Request,
-      @inject(ServiceBindings.GATEWAY_SERVICE) private gatewayService: GatewayServiceI,
-      @inject(ServiceBindings.DATA_FLOW_SERVICE) private dataFlowService: DataFlowServiceI,
-      @repository(SystemInfoRepository)
-      private systemInfoRepository : SystemInfoRepository,
-    ) {}
+    @inject(RestBindings.Http.REQUEST) private req: Request,
+    @inject(ServiceBindings.GATEWAY_SERVICE) private gatewayService: GatewayServiceI,
+    @inject(ServiceBindings.DATA_FLOW_SERVICE) private dataFlowService: DataFlowServiceI,
+    @repository(SystemInfoRepository)
+    private systemInfoRepository: SystemInfoRepository,
+  ) { }
 
   // Map to `GET /system`
   @get('/system', {
     responses: {
       '200': {
         description: 'System Information',
-        content: {'application/json': {schema: getModelSchemaRef(SystemInfo)}},
+        content: { 'application/json': { schema: getModelSchemaRef(SystemInfo) } },
       },
     },
   })
@@ -35,7 +35,7 @@ export class GatewayController {
     responses: {
       '200': {
         description: 'System Information',
-        content: {'application/json': {schema: getModelSchemaRef(SystemInfo)}},
+        content: { 'application/json': { schema: getModelSchemaRef(SystemInfo) } },
       },
     },
   })
@@ -43,7 +43,7 @@ export class GatewayController {
     @requestBody({
       content: {
         'application/json': {
-          content: {'application/json': {schema: SystemInfoSchema}},
+          content: { 'application/json': { schema: SystemInfoSchema } },
         },
       },
     })
@@ -53,14 +53,14 @@ export class GatewayController {
     let systemInfo: SystemInfo = await this.gatewayService.getSystemInformation(payload);
     // systemInfo = await this.systemInfoRepository.create(systemInfo);
     console.log(systemInfo);
-    return systemInfo;    
+    return systemInfo;
   }
 
   @post('/data-flow', {
     responses: {
       '200': {
         description: 'Data Flow for processing Edge Functions and Edge Rules',
-        content: {'application/json': {schema: DataflowSchema}},
+        content: { 'application/json': { schema: DataflowSchema } },
       },
     },
   })
@@ -68,18 +68,18 @@ export class GatewayController {
     @requestBody({
       content: {
         'application/json': {
-          content: {'application/json': {schema: DataflowSchema}},
+          content: { 'application/json': { schema: DataflowSchema } },
         },
       },
     })
     payload: typeof DataflowSchema,
   ): Promise<any> {
     console.log('IN GatewayController.dataFlow with Payload: >>> ', payload);
-    try{
+    try {
       return this.dataFlowService.execute(payload);
-    }catch(error){
+    } catch (error) {
       Promise.reject(error);
-    }    
+    }
   }
 
 
@@ -87,7 +87,7 @@ export class GatewayController {
     responses: {
       '200': {
         description: 'Some Event triggered...',
-        content: {'application/json': {schema: EventSchema}},
+        content: { 'application/json': { schema: EventSchema } },
       },
     },
   })
@@ -95,18 +95,18 @@ export class GatewayController {
     @requestBody({
       content: {
         'application/json': {
-          content: {'application/json': {schema: EventSchema}},
+          content: { 'application/json': { schema: EventSchema } },
         },
       },
     })
     payload: typeof EventSchema,
   ): Promise<any> {
     console.log('IN GatewayController.eventTriggered with Payload: >>> ', payload);
-    try{
-      return this.gatewayService.syncWithCloud();
-    }catch(error){
+    try {
+      return this.gatewayService.restartGateway();
+    } catch (error) {
       Promise.reject(error);
-    }    
+    }
   }
 
 }
