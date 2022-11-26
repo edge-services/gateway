@@ -27,7 +27,10 @@ export class GatewayService implements GatewayServiceI {
     await this.commonService.setItemInCache('isOnline', isOnline);
     // await this.commonService.setItemInCache('isOnline', false);  
     await this.syncWithCloud();
-    await this.radioService.initRadio();
+    if (process.env.RADIO ? process.env.RADIO : false) {
+      await this.radioService.initRadio();
+    }
+
     await this.sensorTagService.initSensorTag();
   }
 

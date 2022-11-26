@@ -47,7 +47,7 @@ $hzn register --policy gateway.policy.json
 $hzn eventlog list -f
 
 $hzn service log -f gateway
-
+ 
 $hzn unregister -f
 
 $ hzn version
