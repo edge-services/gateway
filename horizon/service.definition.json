@@ -54,6 +54,12 @@
             "defaultValue": "false"
         },
         {
+            "name": "RADIO",
+            "label": "RADIO",
+            "type": "boolean",
+            "defaultValue": "false"
+        },
+        {
             "name": "FLOW_URL",
             "label": "FLOW_URL",
             "type": "string",
@@ -87,7 +93,7 @@
             "name": "CLIENT_SECRET",
             "label": "CLIENT_SECRET",
             "type": "string",
-            "defaultValue": "f296fb0d-503b-49ee-b460-1628ab580496"
+            "defaultValue": "91c8b166-9d42-44cf-bf08-e4199f058f56"
         }
     ],
     "deployment": {

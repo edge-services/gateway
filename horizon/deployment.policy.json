@@ -49,6 +49,10 @@
           "value": false
         },
         {
+          "name": "RADIO",
+          "value": false
+        },
+        {
           "name": "FLOW_URL",
           "value": "http://localhost:1880/publish"
         },
@@ -70,7 +74,7 @@
         },
         {
           "name": "CLIENT_SECRET",
-          "value": "f296fb0d-503b-49ee-b460-1628ab580496"
+          "value": "91c8b166-9d42-44cf-bf08-e4199f058f56"
         }
       ]
     }

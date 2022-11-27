@@ -21,10 +21,10 @@ export class GatewayLifeObserver implements LifeCycleObserver {
     @inject(ServiceBindings.GATEWAY_SERVICE) private gatewayService: GatewayServiceI,
     @inject(UtilityBindings.SIMULATOR_UTILITY) private simulatoreUtility: SimulatorUtilityI,
     @inject(ServiceBindings.SENSORTAG_SERVICE) private sensorTagService: SensorTagServiceI
-  ) {}
+  ) { }
 
   async boot(): Promise<void> {
-    console.log('\n\n<<<<<<<<< Gateway App Booted >>>>>>>>>>>\n\n');    
+    console.log('\n\n<<<<<<<<< Gateway App Booted >>>>>>>>>>>\n\n');
   }
 
   /**
@@ -33,14 +33,14 @@ export class GatewayLifeObserver implements LifeCycleObserver {
   async start(): Promise<void> {
     console.log('\n\n<<<<<<<<< Gateway App Started >>>>>>>>>>>\n\n');
     let cleanup = new Cleanup();
-    cleanup.init(() => {      
-      this.cleanupOnExit();      
+    cleanup.init(async () => {
+      await this.cleanupOnExit();
     });
     await this.gatewayService.initGateway();
-    if(process.env.SIMULATE && process.env.SIMULATE.toLowerCase() === 'true'){
+    if (process.env.SIMULATE && process.env.SIMULATE.toLowerCase() === 'true') {
       await this.simulatoreUtility.simulate({});
-    } 
-   
+    }
+
   }
 
   /**
@@ -50,13 +50,13 @@ export class GatewayLifeObserver implements LifeCycleObserver {
     console.log('\n\n<<<<<<<<<<<< Gateway App Stopped >>>>>>>>>>>>> \n\n');
   }
 
-  cleanupOnExit(){
-		console.log('\n\n<<<<<<<<< CALLING CLEANUP PROCESS ON EXIT >>>>>>>>> \n\n');
-    this.sensorTagService.clean();
-//		sensortagHandler.disconnectSensorTags();
-		// FACTORY.GatewayHandler().destroyGPIOs(function(err, result){
-		// 	console.log("<<<<<<< Gateway Stopped, Good Bye >>>>>>>>\n");
-		// });
+  async cleanupOnExit() {
+    console.log('\n\n<<<<<<<<< CALLING CLEANUP PROCESS ON EXIT >>>>>>>>> \n\n');
+    await this.sensorTagService.clean();
+    //		sensortagHandler.disconnectSensorTags();
+    // FACTORY.GatewayHandler().destroyGPIOs(function(err, result){
+    // 	console.log("<<<<<<< Gateway Stopped, Good Bye >>>>>>>>\n");
+    // });
   }
 
 
