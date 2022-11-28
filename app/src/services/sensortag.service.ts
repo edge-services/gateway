@@ -36,14 +36,14 @@ export class SensorTagService implements SensorTagServiceI {
     this.tags.push(sensorTag);
     let flowService = this.dataFlowService;
     let payload: any = { type: 'TI_SensorTag', d: {} };
-    console.log('IN OnDiscover, sensorTag: >> ', sensorTag);
+    // console.log('IN OnDiscover, sensorTag: >> ', sensorTag);
     try {
 
       SensorTag.stopDiscoverAll(await this.onDiscover);
       // sensorTag.disconnect();
       // let that = this;
 
-      const attributes: Attribute[] = await this.fetchAttributes();
+      const attributes: Attribute[] = await this.fetchAttributes(sensorTag);
       console.log('Attributes Fetched count: >> ', attributes.length);
       const attributesMap: Map<String, Attribute> = new Map<String, Attribute>();
       if (attributes && attributes.length > 0) {
@@ -251,24 +251,41 @@ export class SensorTagService implements SensorTagServiceI {
     }
   }
 
-  private async fetchAttributes() {
+  private async fetchAttributes(sensorTag: any) {
+    console.log('IN fetchAttributes, sensorTag: >> ', sensorTag.id);
     const thisDevice: Device = await this.commonService.getItemFromCache('thisDevice');
-
-    const filter: any = {
+    const deviceFilter: any = {
       "where": {
         "metadata.tenantId": process.env.TENANT_ID,
-        "metadata.entityType": "DEVICE",
-        "type": AttributeType.TELEMETRY
+        "deviceSerialNo": sensorTag.id
       },
       "offset": 0,
-      "limit": 500,
+      "limit": 10,
       "skip": 0
     };
-    if (thisDevice && thisDevice.metadata && thisDevice.metadata.manufacturerId) {
-      filter['where']['metadata.manufacturerId'] = thisDevice.metadata.manufacturerId;
+
+    const devices: any[] = await this.iotService.fetchDevices(deviceFilter, false);
+    if (devices && devices.length > 0) {
+      const sensorDevice: Device = devices[0];
+      console.log("Detected SensorTag: >>  ", sensorDevice);
+      // payload['uniqueId'] = sensorTag.id;
+      const filter: any = {
+        "where": {
+          "metadata.tenantId": process.env.TENANT_ID,
+          "metadata.entityType": "DEVICE",
+          "metadata.entityCategoryId": sensorDevice.metadata.entityCategoryId
+          // "type": AttributeType.TELEMETRY
+        },
+        "offset": 0,
+        "limit": 500,
+        "skip": 0
+      };
+      // console.log('syncAttributes, filter: >> ', filter);
+      return this.iotService.fetchAttributes(EntityType.DEVICE, filter, false);
     }
-    // console.log('syncAttributes, filter: >> ', filter);
-    return this.iotService.fetchAttributes(EntityType.DEVICE, filter, false);
+
+    return [];
+
   }
 
   async clean() {
