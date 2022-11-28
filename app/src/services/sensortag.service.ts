@@ -32,16 +32,23 @@ export class SensorTagService implements SensorTagServiceI {
     }
   }
 
+  async getTags(): Promise<any> {
+    return this.tags;
+  }
+
   async onDiscover(sensorTag: any) {
     this.tags.push(sensorTag);
+    await this.refreshSensorTag(sensorTag);
+  }
+
+  async refreshSensorTag(sensorTag: any) {
     let flowService = this.dataFlowService;
+    let commonService = this.commonService;
     let payload: any = { type: 'TI_SensorTag', d: {} };
-    // console.log('IN OnDiscover, sensorTag: >> ', sensorTag);
+    console.log('IN OnDiscover, sensorTag: >> ', sensorTag);
     try {
 
       SensorTag.stopDiscoverAll(await this.onDiscover);
-      // sensorTag.disconnect();
-      // let that = this;
 
       const attributes: Attribute[] = await this.fetchAttributes(sensorTag);
       console.log('Attributes Fetched count: >> ', attributes.length);
@@ -150,7 +157,7 @@ export class SensorTagService implements SensorTagServiceI {
       }
 
       // read all the sensors except the keys:
-      function readSensors() {
+      async function readSensors() {
         // device.readGyroscope(reportGyroscope);
         // resetSensorsData(payload);
         // readBasicDetails(payload);    
@@ -228,10 +235,13 @@ export class SensorTagService implements SensorTagServiceI {
         console.log('\n\n --------------------------------------');
         // console.log(payload);
         if (flowService) {
-          flowService.execute(payload).catch((error: any) => {
-            console.log('ERROR in DataFlowService.execute: >> ');
-            console.error(error);
-          });
+          const status: string = await commonService.getItemFromCache('status');
+          if (status && status != 'SYNC') {
+            flowService.execute(payload).catch((error: any) => {
+              console.log('ERROR in DataFlowService.execute: >> ');
+              console.error(error);
+            });
+          }
         } else {
           console.log(payload);
         }
@@ -257,7 +267,7 @@ export class SensorTagService implements SensorTagServiceI {
     const deviceFilter: any = {
       "where": {
         "metadata.tenantId": process.env.TENANT_ID,
-        "deviceSerialNo": sensorTag.id
+        "or": [{ "deviceSerialNo": sensorTag.id }, { "deviceSKU": sensorTag.id }]
       },
       "offset": 0,
       "limit": 10,
@@ -290,6 +300,8 @@ export class SensorTagService implements SensorTagServiceI {
 
   async clean() {
     SensorTag.stopDiscoverAll(await this.onDiscover);
+    // SensorTag.stopDiscoverAll();
+    SensorTag.disconnect();
     this.tags.forEach((tag: any) => {
       tag.disconnect();
     });

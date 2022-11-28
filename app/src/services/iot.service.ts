@@ -27,6 +27,7 @@ export class IoTService implements IoTServiceI {
 
   async syncWithCloud(): Promise<any> {
     const isOnline = await this.commonService.getItemFromCache('isOnline');
+    console.log('IN IoTService.syncWithCloud, isOnline: >>>> ', isOnline);
     if (isOnline) {
       await this.fetchAuthToken();
     }
@@ -46,16 +47,17 @@ export class IoTService implements IoTServiceI {
 
   private async fetchAuthToken(): Promise<void> {
     let tokenData = await this.commonService.getItemFromCache('token');
+    // console.log('In fetchAuthToken, tenantId: ', process.env.TENANT_ID, ', tokenData: ', tokenData);
     if (tokenData && process.env.TENANT_ID) {
-      // console.log('VERIFY or REFRESH TOKEN: >> ', tokenData);
       tokenData = await this.authService.refreshAuthToken(process.env.TENANT_ID, tokenData.principal.id, tokenData.refreshToken);
       console.log('TOKEN REFRESHED >>>>>>> ');
     } else {
       if (process.env.CLIENT_ID && process.env.CLIENT_SECRET) {
+        // console.log('In IoTService.fetchAuthToken: >> ');
         tokenData = await this.authService.getClientToken(process.env.CLIENT_ID, process.env.CLIENT_SECRET);
       }
     }
-    this.commonService.setItemInCache('token', tokenData);
+    await this.commonService.setItemInCache('token', tokenData);
     await this.setHeader(tokenData.token);
     Promise.resolve();
   }

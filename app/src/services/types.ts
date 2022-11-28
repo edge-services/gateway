@@ -20,6 +20,8 @@ export interface RadioServiceI {
 
 export interface SensorTagServiceI {
     initSensorTag(): void;
+    getTags(): any;
+    refreshSensorTag(tag: any): void;
     clean(): void;
 }
 
