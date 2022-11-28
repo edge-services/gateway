@@ -23,7 +23,9 @@ export class RadioService implements RadioServiceI {
   async initRadio(): Promise<void> {
     try {
 
-      if (process.platform != 'darwin') {
+      const hasRadio = process.env.RADIO ? process.env.RADIO : false;
+
+      if (hasRadio && process.platform != 'darwin') {
         RADIO = require('edge-sx127x');
       }
 

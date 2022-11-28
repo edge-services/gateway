@@ -37,7 +37,9 @@ export class GatewayService implements GatewayServiceI {
   async restartGateway(): Promise<void> {
     await this.sensorTagService.clean();
     await this.syncWithCloud();
-    await this.radioService.initRadio();
+    if (process.env.RADIO ? process.env.RADIO : false) {
+      await this.radioService.initRadio();
+    }
     await this.sensorTagService.initSensorTag();
   }
 
