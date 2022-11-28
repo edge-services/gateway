@@ -199,6 +199,9 @@ export class SensorTagService implements SensorTagServiceI {
               payload.d.humidity = +humidity.toFixed(1);;
             }
           });
+        }
+
+        if (attributesMap.get('temperature')?.requiredAttribute) {
           sensorTag.readIrTemperature(function reportIrTemp(error: any, objectTemperature: number, ambientTemperature: number) {
             if (error) {
               payload.d.objectTemperature = 0;
@@ -217,10 +220,10 @@ export class SensorTagService implements SensorTagServiceI {
             } else {
               payload.d.lux = +lux.toFixed(1);
             }
-
-            // sensorTag.readBatteryLevel(reportBatteryLevel);
           });
         }
+
+        // sensorTag.readBatteryLevel(reportBatteryLevel);
 
         console.log('\n\n --------------------------------------');
         // console.log(payload);
