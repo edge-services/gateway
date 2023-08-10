@@ -69,13 +69,13 @@
             "name": "AUTH_API_URL",
             "label": "AUTH_API_URL",
             "type": "string",
-            "defaultValue": "https://smartthings-auth.mybluemix.net/api"
+            "defaultValue": "https://smartthings-accounts.15vte5mzdbk3.us-east.codeengine.appdomain.cloud/api"
         },
         {
             "name": "IOT_API_URL",
             "label": "IOT_API_URL",
             "type": "string",
-            "defaultValue": "https://smartthings-iot.mybluemix.net/api"
+            "defaultValue": "https://smartthings-iot.15vte5mzdbk3.us-east.codeengine.appdomain.cloud/api"
         },
         {
             "name": "TENANT_ID",

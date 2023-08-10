@@ -58,11 +58,11 @@
         },
         {
           "name": "AUTH_API_URL",
-          "value": "https://smartthings-auth.mybluemix.net/api"
+          "value": "https://smartthings-accounts.15vte5mzdbk3.us-east.codeengine.appdomain.cloud/api"
         },
         {
           "name": "IOT_API_URL",
-          "value": "https://smartthings-iot.mybluemix.net/api"
+          "value": "https://smartthings-iot.15vte5mzdbk3.us-east.codeengine.appdomain.cloud/api"
         },
         {
           "name": "TENANT_ID",
